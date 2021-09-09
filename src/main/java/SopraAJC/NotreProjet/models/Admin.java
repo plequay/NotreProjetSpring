@@ -18,13 +18,13 @@ public class Admin extends Compte{
 		super(id,login, password);
 	}
 		
-	public Admin (Integer id, String login, String password, String prenom, String nom, String surnom)
+	public Admin (Integer id, String username, String password, String prenom, String nom)
 	{
-		super(id,login,password, prenom, nom, surnom);
-	}	
+		super(id, username, password, prenom, nom, Role.ROLE_ADMIN);
+	}
 	
-	public Admin (String login, String password, String prenom, String nom, String surnom)
+	public Admin (String username, String password, String prenom, String nom)
 	{
-		super(login,password, prenom, nom, surnom);
+		super(username, password, prenom, nom, Role.ROLE_ADMIN);
 	}
 }
