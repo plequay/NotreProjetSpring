@@ -8,8 +8,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,21 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.BatimentException;
-import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
 import SopraAJC.NotreProjet.models.JsonViews;
-import SopraAJC.NotreProjet.repositories.BatimentRepository;
+import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRepository;
 
 @RestController
-@RequestMapping("/api/batiment")
-public class BatimentRestController {
+@RequestMapping("/api/transformation")
+public class TransformationRestController {
 
 	@Autowired
-	private BatimentRepository bRepo;
+	private TransformationRepository tRepo;
 	
 	@Autowired
 	private CoutBatimentRepository cbRepo;
@@ -49,14 +49,14 @@ public class BatimentRestController {
 	
 	@GetMapping("")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public List<Batiment> getAll() {
-		return bRepo.findAll();
+	public List<Transformation> getAllBatimentTransformation() {
+		return tRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment findById(@PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public Transformation findBatimentTransformationById(@PathVariable Integer id) {
+		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
 			return opt.get();
 		}
@@ -66,66 +66,66 @@ public class BatimentRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment add(@Valid @RequestBody Batiment batiment, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Transformation createBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
-		bRepo.save(batiment);
+		tRepo.save(transformation);
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(batiment,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 			cbRepo.save(cb);
 		});
-		return batiment;
+		return transformation;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment replace(@Valid @RequestBody Batiment batiment, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Transformation replaceBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
-		Optional<Batiment> opt = bRepo.findById(id);
+		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
-			batiment.setId(id);
+			transformation.setId(id);
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(batiment,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 				cbRepo.save(cb);
 			});
-			return bRepo.save(batiment);
+			return tRepo.save(transformation);
 		}
 		throw new BatimentException();
 	}
 	
 	@PatchMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment modify(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public Transformation modifyBatimentTransformation(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
+		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
-			Batiment batEnBase = opt.get();
+			Transformation batTransEnBase = opt.get();
 			fields.forEach((key,value) -> {
-				Field field = ReflectionUtils.findField(Batiment.class, key);
+				Field field = ReflectionUtils.findField(Transformation.class, key);
 				ReflectionUtils.makeAccessible(field);
-				ReflectionUtils.setField(field, batEnBase, value);
+				ReflectionUtils.setField(field, batTransEnBase, value);
 			});
-			return bRepo.save(batEnBase);
+			return tRepo.save(batTransEnBase);
 		}
 		throw new BatimentException();
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public Batiment delete(@PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public void deleteBatimentTransformation(@PathVariable Integer id) {
+		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
-			Batiment batADelete = opt.get();
-			List<CoutBatiment> cbADelete = batADelete.getCoutBatiment();
-			for(CoutBatiment cb : cbADelete) {
+			Transformation batTransADelete = opt.get();
+			List<CoutBatiment> cbTransADelete = batTransADelete.getCoutBatiment();
+			for(CoutBatiment cb : cbTransADelete) {
 				cbRepo.delete(cb);
 			}
-			bRepo.delete(batADelete);
+			tRepo.delete(batTransADelete);
 		}
 		throw new BatimentException();
 	}

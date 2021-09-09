@@ -8,8 +8,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,21 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.BatimentException;
-import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
+import SopraAJC.NotreProjet.models.Defense;
 import SopraAJC.NotreProjet.models.JsonViews;
-import SopraAJC.NotreProjet.repositories.BatimentRepository;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
+import SopraAJC.NotreProjet.repositories.DefenseRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 
 @RestController
-@RequestMapping("/api/batiment")
-public class BatimentRestController {
+@RequestMapping("/api/defense")
+public class DefenseRestController {
 
 	@Autowired
-	private BatimentRepository bRepo;
+	private DefenseRepository dRepo;
 	
 	@Autowired
 	private CoutBatimentRepository cbRepo;
@@ -49,14 +49,14 @@ public class BatimentRestController {
 	
 	@GetMapping("")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public List<Batiment> getAll() {
-		return bRepo.findAll();
+	public List<Defense> getAllBatimentDefense() {
+		return dRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment findById(@PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public Defense findBatimentDefenseById(@PathVariable Integer id) {
+		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
 			return opt.get();
 		}
@@ -66,66 +66,66 @@ public class BatimentRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment add(@Valid @RequestBody Batiment batiment, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Defense createBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
-		bRepo.save(batiment);
+		dRepo.save(defense);
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(batiment,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 			cbRepo.save(cb);
 		});
-		return batiment;
+		return defense;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment replace(@Valid @RequestBody Batiment batiment, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Defense replaceBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
-		Optional<Batiment> opt = bRepo.findById(id);
+		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
-			batiment.setId(id);
+			defense.setId(id);
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(batiment,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 				cbRepo.save(cb);
 			});
-			return bRepo.save(batiment);
+			return dRepo.save(defense);
 		}
 		throw new BatimentException();
 	}
 	
 	@PatchMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Batiment modify(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public Defense modifyBatimentDefense(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
+		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
-			Batiment batEnBase = opt.get();
+			Defense batDefEnBase = opt.get();
 			fields.forEach((key,value) -> {
-				Field field = ReflectionUtils.findField(Batiment.class, key);
+				Field field = ReflectionUtils.findField(Defense.class, key);
 				ReflectionUtils.makeAccessible(field);
-				ReflectionUtils.setField(field, batEnBase, value);
+				ReflectionUtils.setField(field, batDefEnBase, value);
 			});
-			return bRepo.save(batEnBase);
+			return dRepo.save(batDefEnBase);
 		}
 		throw new BatimentException();
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public Batiment delete(@PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+	public void deleteBatimentDefense(@PathVariable Integer id) {
+		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
-			Batiment batADelete = opt.get();
-			List<CoutBatiment> cbADelete = batADelete.getCoutBatiment();
-			for(CoutBatiment cb : cbADelete) {
+			Defense batDefADelete = opt.get();
+			List<CoutBatiment> cbDefADelete = batDefADelete.getCoutBatiment();
+			for(CoutBatiment cb : cbDefADelete) {
 				cbRepo.delete(cb);
 			}
-			bRepo.delete(batADelete);
+			dRepo.delete(batDefADelete);
 		}
 		throw new BatimentException();
 	}
