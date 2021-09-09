@@ -2,10 +2,12 @@ package SopraAJC.NotreProjet.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import SopraAJC.NotreProjet.exceptions.RessourceException;
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.Production;
 import SopraAJC.NotreProjet.models.Ressource;
@@ -13,6 +15,7 @@ import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.SessionRessourceKey;
+import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
@@ -26,16 +29,17 @@ import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 public class GestionRessourceService {
 
 	@Autowired
-	SessionRessourceRepository sessionRessourceRepository;
+	private SessionRessourceRepository sessionRessourceRepository;
 	
 	@Autowired
-	RessourceRepository ressourceRepository;
+	private RessourceRepository ressourceRepository;
 	
 	@Autowired
-	SessionBatimentRepository sessionBatimentRepository;
+	private SessionBatimentRepository sessionBatimentRepository;
 	
 	@Autowired
-	TransformationRessourceRepository transformationRessourceRepository;
+	private TransformationRessourceRepository transformationRessourceRepository;
+	
 	
 	/*
 	    * Piocher ressources
