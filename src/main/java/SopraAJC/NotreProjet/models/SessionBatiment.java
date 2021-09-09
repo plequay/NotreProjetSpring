@@ -32,7 +32,6 @@ public class SessionBatiment {
 		this.level = level;
 	}
 
-	public SessionBatiment() {
     private boolean used = false;
     
     public SessionBatiment() {
