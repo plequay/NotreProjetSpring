@@ -1,11 +1,16 @@
 package SopraAJC.NotreProjet.models;
 
-import javax.persistence.Entity;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Transformation  extends Batiment{
 
+	@OneToMany(mappedBy = "transformation")
+	private List<TransformationRessource> transformationRessouce;
+	
 	public Transformation() {
 		super();
 		this.setAmeliorable(false);
