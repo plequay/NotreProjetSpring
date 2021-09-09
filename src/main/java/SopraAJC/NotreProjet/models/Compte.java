@@ -1,5 +1,7 @@
 package SopraAJC.NotreProjet.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -11,18 +13,24 @@ public abstract class Compte {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(JsonViews.Common.class)
 	protected Integer id;
 	@Column(name = "username", length = 150, unique = true, nullable = false)
+	@JsonView(JsonViews.Common.class)
 	protected String username;
 	@Column(name = "password", length = 255, nullable = false)
 	protected String password;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", length = 30, nullable = false)
+	@JsonView(JsonViews.Common.class)
 	private Role role;
+	@JsonView(JsonViews.Common.class)
 	protected String prenom;
+	@JsonView(JsonViews.Common.class)
 	protected String nom;
 	
 	@OneToMany(mappedBy = "id.compte")
+	@JsonView(JsonViews.CompteWithSession.class)
 	protected List<Session> sessions;
 	
 	public Compte() {

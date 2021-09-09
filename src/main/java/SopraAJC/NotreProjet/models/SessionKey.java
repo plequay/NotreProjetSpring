@@ -1,5 +1,7 @@
 package SopraAJC.NotreProjet.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -12,11 +14,13 @@ public class SessionKey implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "partie_id", foreignKey = @ForeignKey(name = "session_partie_id_pk"))
-    private Partie partie;
+	@JsonView({JsonViews.SessionWithPartie.class, JsonViews.SessionWithPartieAndCompte.class})
+	private Partie partie;
 
     @ManyToOne
     @JoinColumn(name = "compte_id", foreignKey = @ForeignKey(name = "session_compte_id_pk"))
-    private Compte compte;
+	@JsonView({JsonViews.SessionWithCompte.class, JsonViews.SessionWithPartieAndCompte.class, JsonViews.PartieWithSession.class})
+	private Compte compte;
 	
     public SessionKey() {
     	
