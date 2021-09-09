@@ -133,7 +133,7 @@ public class GestionRessourceService {
 	    * Liste des TransformationRessource pour le batiment transformation
 	    * */	
 	public List<TransformationRessource> listBatimentTransformation(Transformation transformation){
-		List<TransformationRessource> listTransformationRessource = transformationRessourceRepository.findByBatiment(transformation);
+		List<TransformationRessource> listTransformationRessource = transformationRessourceRepository.findByTransformation(transformation);
 		return listTransformationRessource;
 	}
 	

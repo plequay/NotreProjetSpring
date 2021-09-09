@@ -1,8 +1,5 @@
 package SopraAJC.NotreProjet.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,13 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
-import SopraAJC.NotreProjet.config.AppConfig;
-import SopraAJC.NotreProjet.models.Attaque;
-import SopraAJC.NotreProjet.models.CoutBatiment;
-import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.repositories.BatimentRepository;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;

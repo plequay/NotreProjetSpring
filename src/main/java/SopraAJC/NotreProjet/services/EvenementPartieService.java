@@ -22,7 +22,7 @@ public class EvenementPartieService {
 	{
 		session.setaJoueLeTours(true);
 		session.setTourEnCours(false);
-		Partie partie = partieRepo.findBySession(session).get();
+		Partie partie = session.getId().getPartie();
 		int index = partie.getSessions().indexOf(session);
 		List<Session> sessions = partie.getSessions();
 		if (index == sessions.size()) {
