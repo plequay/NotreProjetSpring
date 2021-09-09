@@ -8,10 +8,10 @@ public class JsonViews {
 		
 	}
 	
-	public static class SessionBatimentWithSession{
+	public static class SessionBatimentWithSession extends Common {
 		
 	}
-public static class SessionBatimentWithBatiment{
+public static class SessionBatimentWithBatiment extends Common {
 		
 	}
 	
