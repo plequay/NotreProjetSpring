@@ -30,6 +30,7 @@ public interface SessionBatimentRepository extends JpaRepository<SessionBatiment
 	Optional<SessionBatiment> findBySessionAndBatiment(Session session, Batiment batiment);
 
 	
+	
 //	@Query("select s from SessionBatiment s where s.batiment")
 //	List<SessionBatiment> findByTypeBatiment(@Param(value="type") Attaque type);
 
