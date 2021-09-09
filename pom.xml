@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>SopraAJC</groupId>
-	<artifactId>NotreProjet</artifactId>
+	<artifactId>NotreProjetSpring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>NotreProjet</name>
 	<description>Demo project for Spring Boot</description>
