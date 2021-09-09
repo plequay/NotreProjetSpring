@@ -32,7 +32,9 @@ public class SessionBatiment {
 		this.level = level;
 	}
 
-	public SessionBatiment() {
+    private boolean used = false;
+    
+    public SessionBatiment() {
     }
 
     public SessionBatiment(Session session, Batiment batiment, double pointsDeVie, double pointsDAttaque) {
@@ -99,6 +101,14 @@ public class SessionBatiment {
 
 	public void setPointsDAttaque(double pointsDAttaque) {
 		this.pointsDAttaque = pointsDAttaque;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 	
 }
