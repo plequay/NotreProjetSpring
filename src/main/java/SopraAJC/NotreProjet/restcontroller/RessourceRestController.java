@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -23,7 +23,7 @@ import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 
-@Controller
+@RestController
 @RequestMapping("/api/ressource")
 public class RessourceRestController {
 
@@ -59,17 +59,19 @@ public class RessourceRestController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		Optional<Ressource> opt =ressourceRepo.findById(id);
-		if(opt.isEmpty()) {
+		if(opt.isPresent()) {
 			ressourceRepo.deleteById(id);
 		}
-		throw new RessourceException();		
+		else {
+		throw new RessourceException();	
+		}
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.Common.class)
 	public Ressource replace(@RequestBody Ressource ressource, @PathVariable Integer id) {
 		Optional<Ressource> opt =ressourceRepo.findById(id);
-		if(opt.isEmpty()) {
+		if(opt.isPresent()) {
 			ressource.setId(id);
 			return ressourceRepo.save(ressource);
 		}
