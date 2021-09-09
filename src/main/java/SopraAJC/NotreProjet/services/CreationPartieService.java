@@ -1,6 +1,5 @@
 package SopraAJC.NotreProjet.services;
 
-SopraAJC.NotreProjet.models.*;
 import SopraAJC.NotreProjet.models.*;
 import SopraAJC.NotreProjet.repositories.*;
 
@@ -81,7 +80,7 @@ public class CreationPartieService {
 	        	sessionRessourceRepository.save(sessionRessource);
     		}
     		Batiment batiment = batimentRepository.findByNom("bastide").get();
-    		SessionBatiment sessionBatiment = new SessionBatiment(session, batiment ,batiment.getAtt(),batiment.getDef());
+    		SessionBatiment sessionBatiment = new SessionBatiment(session, batiment, batiment.getPointsDefense());
         }
     }
     

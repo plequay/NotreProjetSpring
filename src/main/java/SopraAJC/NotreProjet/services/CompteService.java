@@ -36,8 +36,8 @@ public class CompteService {
 	
 	public static Compte checkConnexion(String login, String password) {
 		Compte compte = null;
-		if(compteRepo.findByLoginAndPassword(login, password).isPresent()) {
-			compte = compteRepo.findByLoginAndPassword(login, password).get();
+		if(compteRepo.findByUsernameAndPassword(login, password).isPresent()) {
+			compte = compteRepo.findByUsernameAndPassword(login, password).get();
 		}
 		return compte;
 		//gerer joueur et admin
