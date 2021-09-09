@@ -15,7 +15,6 @@ import SopraAJC.NotreProjet.models.SessionBatiment;
 
 public interface SessionBatimentRepository extends JpaRepository<SessionBatiment, Integer> {
 
-	Optional<SessionBatiment> findBySessionAndBatiment(Session session, Batiment batiment);
 	
 	List<SessionBatiment> findBySession(Session session);
 
@@ -28,7 +27,6 @@ public interface SessionBatimentRepository extends JpaRepository<SessionBatiment
 	@Query("select s from SessionBatiment s where s.session=:session and  s.batiment in(select p from Defense p)")
 	List<SessionBatiment> findBySessionAndBatimentDefense(@Param(value = "session") Session session);
 
-	@Query
 	Optional<SessionBatiment> findBySessionAndBatiment(Session session, Batiment batiment);
 
 	

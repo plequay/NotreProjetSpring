@@ -23,9 +23,9 @@ public class Session {
     @Column(name = "a_commence")
     private boolean aCommence;
 
-    private int def;
+    private double def;
 
-    private int att;
+    private double att;
 
     @OneToMany (mappedBy = "session")
     private List<SessionBatiment> sessionBatiment;
@@ -86,19 +86,19 @@ public class Session {
         this.aCommence = aCommence;
     }
 
-    public int getDef() {
+    public double getDef() {
         return def;
     }
 
-    public void setDef(int def) {
+    public void setDef(double def) {
         this.def = def;
     }
 
-    public int getAtt() {
+    public double getAtt() {
         return att;
     }
 
-    public void setAtt(int att) {
+    public void setAtt(double att) {
         this.att = att;
     }
 
