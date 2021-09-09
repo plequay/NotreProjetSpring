@@ -15,7 +15,7 @@ public class Attaque extends Batiment {
 		super(nom, pointsDefense, level, ameliorable);
 		this.pointsDAttaque = pointsDAttaque;
 	}
-
+	
 	public double getPointsDAttaque() {
 		return pointsDAttaque;
 	}

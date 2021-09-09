@@ -22,6 +22,18 @@ public class SessionBatiment {
     
     private double pointsDAttaque;
     
+	protected int level=1;
+    
+    public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+    private boolean used = false;
+    
     public SessionBatiment() {
     }
 
@@ -89,6 +101,14 @@ public class SessionBatiment {
 
 	public void setPointsDAttaque(double pointsDAttaque) {
 		this.pointsDAttaque = pointsDAttaque;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 	
 }

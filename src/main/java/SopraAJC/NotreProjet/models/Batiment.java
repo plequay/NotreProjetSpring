@@ -15,7 +15,6 @@ public abstract class Batiment {
 	protected Integer id;
 	protected String nom;
 	protected double pointsDefense;
-	protected int level=1;
 	protected boolean ameliorable;
 	
 	@OneToMany(mappedBy = "id.batiment")
@@ -30,7 +29,6 @@ public abstract class Batiment {
 		super();
 		this.nom = nom;
 		this.pointsDefense = pointsDefense;
-		this.level = level;
 		this.ameliorable = ameliorable;
 		this.coutBatiment = coutBatiment;
 	}
@@ -42,7 +40,6 @@ public abstract class Batiment {
 		this.id = id;
 		this.nom = nom;
 		this.pointsDefense = pointsDefense;
-		this.level = level;
 		this.ameliorable = ameliorable;
 	}
 
@@ -50,7 +47,6 @@ public abstract class Batiment {
 		super();
 		this.nom = nom;
 		this.pointsDefense = def;
-		this.level = level;
 		this.ameliorable = ameliorable;
 	}
 		
@@ -101,14 +97,6 @@ public abstract class Batiment {
 
 	public void setPointsDefense(double pointsDefense) {
 		this.pointsDefense = pointsDefense;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
 	}
 
 

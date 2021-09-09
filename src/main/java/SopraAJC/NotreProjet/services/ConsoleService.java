@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConsoleService implements CommandLineRunner {
 
-    private  static  final Logger LOGGER  = LoggerFactory.getLogger(ConsoleService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleService.class);
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -50,9 +50,9 @@ public class ConsoleService implements CommandLineRunner {
 
     }
 
-    public void initBDD(){
+    public void initBDD() {
 
-        Admin admin1 = new Admin("admin1", passwordEncoder.encode("admin1"), "admin1",  "admin1");
+        Admin admin1 = new Admin("admin1", passwordEncoder.encode("admin1"), "admin1", "admin1");
         Joueur joueur1 = new Joueur("joueur1", passwordEncoder.encode("joueur1"), "joueur1", "joueur1");
         Joueur joueur2 = new Joueur("joueur2", passwordEncoder.encode("joueur2"), "joueur2", "joueur2");
         Joueur joueur3 = new Joueur("joueur3", passwordEncoder.encode("joueur3"), "joueur3", "joueur3");
