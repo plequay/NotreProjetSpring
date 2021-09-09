@@ -1,7 +1,6 @@
 package SopraAJC.NotreProjet.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.*;
-import util.Context;
+import SopraAJC.NotreProjet.models.Admin;
+import SopraAJC.NotreProjet.models.Compte;
+import SopraAJC.NotreProjet.models.Joueur;
+import ch.qos.logback.core.Context;
 
 @WebServlet("/pageco")
 public class Connexion extends HttpServlet {
