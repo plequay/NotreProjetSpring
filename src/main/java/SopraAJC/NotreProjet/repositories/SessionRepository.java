@@ -1,6 +1,7 @@
 package SopraAJC.NotreProjet.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,9 @@ public interface SessionRepository extends JpaRepository <Session, SessionKey>{
 
 	/*@Query("select distinct s from Session s left join fetch s.sessionBatiment.batiment left join fetch s.sessionRessource.ressource where s.id =:id")
 	Optional<Session> findByIdWithRessourcesAndBatiments(@Param("id") Integer id);*/
+	
+	@Query("select distinct s from Session s where s.id.partie=:partie and s.id.compte=:compte")
+	Optional<Session> findByPartieAndCompte(@Param(value = "partie") Partie partie, @Param(value = "compte") Compte compte);
 	
 	@Query("select distinct s from Session s where s.id.partie=:partie")	
 	List<Session> findByPartie(@Param(value = "partie") Partie partie);
