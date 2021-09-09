@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import SopraAJC.NotreProjet.exceptions.AttaqueException;
 import SopraAJC.NotreProjet.exceptions.TargetException;
@@ -16,6 +17,7 @@ import SopraAJC.NotreProjet.models.SessionKey;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 
+@Service
 public class AttaqueService {
 
 	@Autowired
