@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Joueur;
-import util.Context;
+import SopraAJC.NotreProjet.models.Joueur;
 
 @WebServlet("/index")
 public class ControlIndex extends HttpServlet{
