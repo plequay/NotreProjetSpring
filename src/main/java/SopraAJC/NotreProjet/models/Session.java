@@ -12,7 +12,7 @@ import java.util.Set;
 public class Session {
 	
 	@EmbeddedId
-    private notreProjetBack.model.SessionKey id;
+    private SessionKey id;
     
     @Column(name = "a_joue_le_tours")
     private boolean aJoueLeTours;
@@ -28,7 +28,7 @@ public class Session {
     private int att;
 
     @OneToMany (mappedBy = "session")
-    private List<notreProjetBack.model.SessionBatiment> sessionBatiment;
+    private List<SessionBatiment> sessionBatiment;
 
     @OneToMany (mappedBy = "id.session")
     private Set<SessionRessource> sessionRessource;
@@ -36,7 +36,7 @@ public class Session {
     public Session() {
     }
 
-    public Session(notreProjetBack.model.SessionKey id) {
+    public Session(SessionKey id) {
 		super();
 		this.id = id;
 	}
@@ -54,11 +54,11 @@ public class Session {
         return Objects.hash(id);
     }
 
-    public notreProjetBack.model.SessionKey getId() {
+    public SessionKey getId() {
         return id;
     }
 
-    public void setId(notreProjetBack.model.SessionKey id) {
+    public void setId(SessionKey id) {
         this.id = id;
     }
 
@@ -102,11 +102,11 @@ public class Session {
         this.att = att;
     }
 
-	public List<notreProjetBack.model.SessionBatiment> getSessionBatiment() {
+	public List<SessionBatiment> getSessionBatiment() {
 		return sessionBatiment;
 	}
 
-	public void setSessionBatiment(List<notreProjetBack.model.SessionBatiment> sessionBatiment) {
+	public void setSessionBatiment(List<SessionBatiment> sessionBatiment) {
 		this.sessionBatiment = sessionBatiment;
 	}
 

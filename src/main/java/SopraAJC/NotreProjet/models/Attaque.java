@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 
 
 @Entity
-public class Attaque extends notreProjetBack.model.Batiment {
+public class Attaque extends Batiment {
 	
 	private double pointsDAttaque;
 	

@@ -3,7 +3,7 @@ package SopraAJC.NotreProjet.models;
 import javax.persistence.Entity;
 
 @Entity
-public class Defense extends notreProjetBack.model.Batiment {
+public class Defense extends Batiment {
 
 	public Defense() {
 	}

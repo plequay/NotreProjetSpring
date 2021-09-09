@@ -10,14 +10,14 @@ import java.util.Objects;
 public class CoutBatiment {
 
 	@EmbeddedId
-    notreProjetBack.model.CoutBatimentKey id;
+    CoutBatimentKey id;
 	
 	private int cout;
 	
 	public CoutBatiment() {
 	}
 	
-	public CoutBatiment(notreProjetBack.model.CoutBatimentKey id, int cout) {
+	public CoutBatiment(CoutBatimentKey id, int cout) {
 		this.id = id;
 		this.cout = cout;
 	}
@@ -39,11 +39,11 @@ public class CoutBatiment {
 		return Objects.equals(id, other.id);
 	}
 
-	public notreProjetBack.model.CoutBatimentKey getId() {
+	public CoutBatimentKey getId() {
 		return id;
 	}
 
-	public void setId(notreProjetBack.model.CoutBatimentKey id) {
+	public void setId(CoutBatimentKey id) {
 		this.id = id;
 	}
 
