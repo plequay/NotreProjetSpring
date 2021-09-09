@@ -12,6 +12,5 @@ import SopraAJC.NotreProjet.models.Session;
 
 public interface PartieRepository extends JpaRepository <Partie, Integer> {
 
-	Optional<Partie> findBySession (Session session);
 
 }
