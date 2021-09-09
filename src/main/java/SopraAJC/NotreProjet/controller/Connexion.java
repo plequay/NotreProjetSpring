@@ -1,4 +1,4 @@
-package SopraAJC.NotrePojet.controller;
+package SopraAJC.NotreProjet.controller;
 
 import java.io.IOException;
 import java.util.List;

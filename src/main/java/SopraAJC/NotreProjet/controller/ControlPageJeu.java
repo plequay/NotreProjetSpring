@@ -1,4 +1,4 @@
-package SopraAJC.NotrePojet.controller;
+package SopraAJC.NotreProjet.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import notreProjetBack.model.Partie;
-import notreProjetBack.model.Session;
-import notreProjetBack.repositories.PartieRepository;
-import notreProjetBack.repositories.SessionRepository;
+import SopraAJC.NotreProjet.models.Partie;
+import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.repositories.SessionRepository;
 
 @Controller
 @RequestMapping("/pagejeu")
