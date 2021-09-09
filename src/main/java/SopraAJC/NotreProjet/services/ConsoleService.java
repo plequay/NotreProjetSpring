@@ -40,13 +40,18 @@ public class ConsoleService implements CommandLineRunner {
 
     @Autowired
     RessourceRepository ressourceRepository;
+    
+    @Autowired
+    TransformationRessourceRepository transformationRessourceRepository;
 
     @Override
     public void run(String... args) throws Exception {
 
         LOGGER.info("Hey guys -> Spring Boot Application started");
 
-        initBDD();
+//        initBDD();
+        //initRessource();
+        //initBatiment();
 
     }
 
@@ -137,4 +142,159 @@ public class ConsoleService implements CommandLineRunner {
 
     }
 
+    public void initRessource() {
+    	Ressource bois = new Ressource("bois");
+        Ressource pierre = new Ressource("pierre");
+        Ressource minerais = new Ressource("minerais");
+        Ressource charbon = new Ressource("charbon");
+        Ressource fer = new Ressource("fer");
+        Ressource gold = new Ressource("gold");
+        Ressource cuivre = new Ressource("cuivre");
+
+        ressourceRepository.save(bois);
+        ressourceRepository.save(pierre);
+        ressourceRepository.save(minerais);
+        ressourceRepository.save(charbon);
+        ressourceRepository.save(fer);
+        ressourceRepository.save(gold);
+        ressourceRepository.save(cuivre);    	
+    }
+    
+    public void initBatiment() {
+    	// Merveille(true)
+    	Ressource bois = ressourceRepository.findByNom("bois").get();
+    	Ressource pierre = ressourceRepository.findByNom("pierre").get();
+    	Ressource minerais = ressourceRepository.findByNom("minerais").get();
+    	Ressource charbon = ressourceRepository.findByNom("charbon").get();
+    	Ressource fer = ressourceRepository.findByNom("fer").get();
+    	Ressource gold = ressourceRepository.findByNom("gold").get();
+    	Ressource cuivre = ressourceRepository.findByNom("cuivre").get();
+    	
+    	////Defense
+    	//Bastide
+    	Defense bastide = new Defense("Bastide", 50, 1, true);
+    	batimentRepository.save(bastide);
+    	
+    	//Muraille
+    	Defense Muraille = new Defense("Muraille", 50, 1, true);
+    	batimentRepository.save(Muraille);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Muraille, bois), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Muraille, pierre), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Muraille, fer), 3));
+    	
+    	//Forteresse
+    	Defense Forteresse = new Defense("Forteresse", 200, 1, true);
+    	batimentRepository.save(Forteresse);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Muraille, pierre), 10));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Muraille, fer), 10));
+    	
+    	
+    	////Batiment transformation
+    	//Four
+    	Transformation four = new Transformation("Four", 30, 1, true);
+    	batimentRepository.save(four);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(four, bois), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(four, pierre), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(four, minerais), 3));
+    	
+
+    	transformationRessourceRepository.save(new TransformationRessource(four, bois, charbon));
+    	
+    	//Fonderie
+    	Transformation fonderie = new Transformation("Fonderie", 40, 1, true);
+    	batimentRepository.save(fonderie);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(four, pierre), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(four, charbon), 6));
+    	
+    	transformationRessourceRepository.save(new TransformationRessource(fonderie, minerais, fer));
+    	transformationRessourceRepository.save(new TransformationRessource(fonderie, minerais, gold));
+    	transformationRessourceRepository.save(new TransformationRessource(fonderie, minerais, cuivre));
+    	
+    	
+    	////Production
+    	//Bucheron
+    	Production bucheron = new Production("Bucheron", 15, 1, false, bois, 1);
+    	batimentRepository.save(bucheron);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(bucheron, pierre), 2));
+    	
+    	//Mineur
+    	Production mineur = new Production("Mineur", 10, 1, false, minerais, 1);
+    	batimentRepository.save(mineur);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(mineur, bois), 2));
+    	
+    	//Bucheron
+    	Production carrier = new Production("Carrier", 10, 1, false, pierre, 1);
+    	batimentRepository.save(carrier);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(carrier, bois), 2));
+    	
+    	//Scierie
+    	Production scierie = new Production("Scierie", 10, 1, true, bois, 1);
+    	batimentRepository.save(scierie);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(scierie, pierre), 8));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(scierie, minerais), 8));
+    	
+    	//Carriere
+    	Production Carriere = new Production("Carriere", 30, 1, true, pierre, 5);
+    	batimentRepository.save(Carriere);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Carriere, bois), 8));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Carriere, minerais), 8));
+    	
+    	//Mine
+    	Production Mine = new Production("Mine", 30, 1, true, bois, 5);
+    	batimentRepository.save(Mine);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Mine, pierre), 8));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Mine, bois), 8));
+    	
+    	
+    	////Attaque
+    	//Catapulte
+    	Attaque Catapulte = new Attaque("Catapulte", 15, 25.0, 1, true);
+    	batimentRepository.save(Catapulte);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Catapulte, pierre), 3));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Catapulte, bois), 5));
+    	
+    	//Scorpion
+    	Attaque Scorpion = new Attaque("Scorpion", 30, 75.0, 1, true);
+    	batimentRepository.save(Scorpion);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Scorpion, pierre), 4));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Scorpion, bois), 8));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Scorpion, fer), 4)); 
+         
+    	//Baliste
+    	Attaque Baliste = new Attaque("Baliste", 120, 240, 1, true);
+    	batimentRepository.save(Baliste);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Baliste, pierre), 15));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Baliste, bois), 10));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Baliste, fer), 8)); 
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Baliste, cuivre), 4));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Baliste, gold), 4));
+        
+    	
+    	////Merveille
+    	Defense Merveille = new Defense("Merveille", 25, 1, true);
+    	batimentRepository.save(Merveille);
+    	
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, bois), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, pierre), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, minerais), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, charbon), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, cuivre), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, fer), 2));
+    	coutBatimentRepository.save(new CoutBatiment(new CoutBatimentKey(Merveille, gold), 2));
+    	
+         
+    }
 }

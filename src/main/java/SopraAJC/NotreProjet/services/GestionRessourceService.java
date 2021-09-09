@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.Production;
@@ -22,7 +22,7 @@ import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
-
+@Service
 public class GestionRessourceService {
 
 	@Autowired
@@ -133,7 +133,7 @@ public class GestionRessourceService {
 	    * Liste des TransformationRessource pour le batiment transformation
 	    * */	
 	public List<TransformationRessource> listBatimentTransformation(Transformation transformation){
-		List<TransformationRessource> listTransformationRessource = transformationRessourceRepository.findByBatiment(transformation);
+		List<TransformationRessource> listTransformationRessource = transformationRessourceRepository.findByTransformation(transformation);
 		return listTransformationRessource;
 	}
 	
