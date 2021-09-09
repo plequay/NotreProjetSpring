@@ -12,12 +12,15 @@ public abstract class Compte {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
-	protected String login;
+	@Column(name = "username", length = 150, unique = true, nullable = false)
+	protected String username;
+	@Column(name = "password", length = 255, nullable = false)
 	protected String password;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", length = 30, nullable = false)
+	private Role role;
 	protected String prenom;
 	protected String nom;
-	@Column(unique = true)
-	protected String surnom;
 	
 	@OneToMany(mappedBy = "id.compte")
 	protected List<Session> sessions;
@@ -26,31 +29,31 @@ public abstract class Compte {
 		super();
 	}
 	
-	public Compte(Integer id, String login, String password, String prenom, String nom, String surnom) {
+	public Compte(Integer id, String username, String password, String prenom, String nom, Role role){
 		this.id = id;
-		this.login = login;
+		this.username = username;
 		this.password = password;
 		this.prenom = prenom;
 		this.nom = nom;
-		this.surnom = surnom;
+		this.role = role;
 	}
 	
-	public Compte(String login, String password, String prenom, String nom, String surnom) {
-		this.login = login;
+	public Compte(String username, String password, String prenom, String nom, Role role) {
+		this.username = username;
 		this.password = password;
 		this.prenom = prenom;
 		this.nom = nom;
-		this.surnom = surnom;
+		this.role = role;
 	}
-	
-	public Compte(String login, String password) {
-		this.login = login;
+
+	public Compte(String username, String password) {
+		this.username = username;
 		this.password = password;
 	}
 	
-	public Compte(Integer id, String login, String password) {
+	public Compte(Integer id, String username, String password) {
 		this.id = id;
-		this.login = login;
+		this.username = username;
 		this.password = password;
 	}
 
@@ -61,15 +64,15 @@ public abstract class Compte {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	public String getLogin() {
-		return login;
+
+	public String getUsername() {
+		return username;
 	}
-	
-	public void setLogin(String login) {
-		this.login = login;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -93,16 +96,7 @@ public abstract class Compte {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	
-	public String getSurnom() {
-		return surnom;
-	}
-	
-	public void setSurnom(String surnom) {
-		this.surnom = surnom;
-	}
-	
-	
+
 	public List<Session> getSessions() {
 		return sessions;
 	}
@@ -111,10 +105,24 @@ public abstract class Compte {
 		this.sessions = sessions;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
-		return "Compte [id=" + id + ", login=" + login + ", password=" + password + ", prenom=" + prenom + ", nom="
-				+ nom + ", surnom=" + surnom + ", sessions=" + sessions + "]";
+		return "Compte{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", prenom='" + prenom + '\'' +
+				", nom='" + nom + '\'' +
+				", sessions=" + sessions +
+				'}';
 	}
 
 	@Override

@@ -9,8 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Partie;
-import util.Context;
+import SopraAJC.NotreProjet.models.Partie;
 @WebServlet("/choixPartie")
 
 public class ControlChoixPartie extends HttpServlet {

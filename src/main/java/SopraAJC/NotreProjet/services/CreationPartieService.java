@@ -80,7 +80,7 @@ public class CreationPartieService {
 	        	sessionRessourceRepository.save(sessionRessource);
     		}
     		Batiment batiment = batimentRepository.findByNom("bastide").get();
-    		SessionBatiment sessionBatiment = new SessionBatiment(session, batiment ,batiment.getPointsDefense(),0);
+    		SessionBatiment sessionBatiment = new SessionBatiment(session, batiment, batiment.getPointsDefense());
         }
     }
     
