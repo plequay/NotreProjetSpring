@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import SopraAJC.NotreProjet.exceptions.AttaqueException;
 import SopraAJC.NotreProjet.exceptions.TargetException;
@@ -16,6 +17,7 @@ import SopraAJC.NotreProjet.models.SessionKey;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 
+@Service
 public class AttaqueService {
 
 	@Autowired
@@ -60,7 +62,14 @@ public class AttaqueService {
 		double degats = attaque/targetBatiment.size();
 		for(SessionBatiment sb : targetBatiment) {
 			sb.setPointsDeVie(sb.getPointsDeVie()-degats);
-			sbRepo.save(sb);
+			if(sb.getPointsDeVie()<=0) {
+				sbRepo.delete(sb);
+			}
+			else 
+			{
+				sbRepo.save(sb);
+			}
+			
 		}
 	}
 	
@@ -78,7 +87,13 @@ public class AttaqueService {
 			double degats = attackBat.getPointsDAttaque()/targetBatiment.size();
 			for(SessionBatiment sb : targetBatiment) {
 				sb.setPointsDeVie(sb.getPointsDeVie()-degats);
-				sbRepo.save(sb);
+				if(sb.getPointsDeVie()<=0) {
+					sbRepo.delete(sb);
+				}
+				else 
+				{
+					sbRepo.save(sb);
+				}
 			}
 		}
 		throw new AttaqueException();
@@ -104,7 +119,13 @@ public class AttaqueService {
 		if(opt.isPresent()) {
 			SessionBatiment targetBat = opt.get();
 			targetBat.setPointsDeVie(targetBat.getPointsDeVie()-attaque);
-			sbRepo.save(targetBat);
+			if(targetBat.getPointsDeVie()<=0) {
+				sbRepo.delete(targetBat);
+			}
+			else 
+			{
+				sbRepo.save(targetBat);
+			}
 		}
 		throw new TargetException();
 	}
@@ -127,6 +148,12 @@ public class AttaqueService {
 		}
 		SessionBatiment targetBat = optTarget.get();
 		targetBat.setPointsDeVie(targetBat.getPointsDeVie()-attackBat.getPointsDAttaque());
-		sbRepo.save(targetBat);
+		if(targetBat.getPointsDeVie()<=0) {
+			sbRepo.delete(targetBat);
+		}
+		else 
+		{
+			sbRepo.save(targetBat);
+		}
 	}
 }

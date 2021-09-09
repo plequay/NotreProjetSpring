@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.Objects;
 
 @Entity
@@ -11,8 +14,10 @@ public class Ressource {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonView(JsonViews.Common.class)
 	private Integer id;
 	
+	@JsonView(JsonViews.Common.class)
 	private String nom;
 
 	public Ressource() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
@@ -16,6 +17,7 @@ import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 
+@Service
 public class ConstructionBatimentService {
 
 	@Autowired
@@ -58,7 +60,7 @@ public class ConstructionBatimentService {
 		return listBat;
 	}
 
-	public void constructBat(Batiment batiment, Session session) // Construction d'un batiment (ajout a la
+	public SessionBatiment constructBat(Batiment batiment, Session session) // Construction d'un batiment (ajout a la
 																	// liste/actuAtt/ActuDef/ActuRessources)
 	{
 		SessionBatiment sb = new SessionBatiment(session, batiment,
@@ -74,16 +76,18 @@ public class ConstructionBatimentService {
 			sessionRessRepo.save(sr);
 		}
 		sessionBatRepo.save(sb);
+		
+		return sb;
 	}
 
-	public boolean verificationAmeliorable(Batiment batiment, Session session) // Verification du nombre de ressources
+	public boolean verificationAmeliorable(SessionBatiment sessionBat) // Verification du nombre de ressources
 																				// du joueur pour acheter un batiment
 																				// (renvoie un bool)
 	{
-		SessionBatiment sessionBat = sessionBatRepo.findBySessionAndBatiment(session, batiment).get();
+		
 		int lvl = sessionBat.getLevel();
-		for (SessionRessource sr : sessionRessRepo.findBySession(session)) {
-			for (CoutBatiment cb : batiment.getCoutBatiment()) {
+		for (SessionRessource sr : sessionRessRepo.findBySession(sessionBat.getSession())) {
+			for (CoutBatiment cb : sessionBat.getBatiment().getCoutBatiment()) {
 				if (cb.getId().getRessource().getNom().equals(sr.getId().getRessource().getNom())
 						&& (lvl * cb.getCout()) > sr.getQuantite()) {
 					return false;
@@ -98,23 +102,23 @@ public class ConstructionBatimentService {
 		List<SessionBatiment> listBat = new ArrayList<SessionBatiment>();
 		List<SessionBatiment> allBat = sessionBatRepo.findBySession(session);
 		for (SessionBatiment bat : allBat) {
-			if (verificationAmeliorable(bat.getBatiment(), session)) {
+			if (verificationAmeliorable(bat)) {
 				listBat.add(bat);
 			}
 		}
 		return listBat;
 	}
 
-	public void ameliorationBat(SessionBatiment sessionBat, Session session) {
+	public SessionBatiment ameliorationBat(SessionBatiment sessionBat) {
 
 		int lvl = sessionBat.getLevel();
 		// Amelioration du batiment
 		sessionBat.setLevel(lvl + 1);
 		sessionBat.setPointsDAttaque(2 * lvl * sessionBat.getPointsDAttaque());
 		sessionBat.setPointsDeVie(2 * lvl * sessionBat.getPointsDeVie());
-
+		sessionBatRepo.save(sessionBat);
 		// Suppression des ressources de la session
-		for (SessionRessource sr : session.getSessionRessource()) 
+		for (SessionRessource sr : sessionBat.getSession().getSessionRessource()) 
 		{
 			for (CoutBatiment cb : sessionBat.getBatiment().getCoutBatiment())
 				if (cb.getId().getRessource().getNom().equals(sr.getId().getRessource().getNom())) {
@@ -122,7 +126,7 @@ public class ConstructionBatimentService {
 				}
 			sessionRessRepo.save(sr);
 		}
-
+		return sessionBat;
 	}
 
 }

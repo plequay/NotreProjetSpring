@@ -3,6 +3,8 @@ package SopraAJC.NotreProjet.models;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -10,6 +12,7 @@ import javax.persistence.ManyToOne;
 public class TransformationRessource {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	@ManyToOne
 	private Transformation transformation;
@@ -18,6 +21,16 @@ public class TransformationRessource {
 	@ManyToOne
 	private Ressource ressourceWin;
 	
+	public TransformationRessource() {
+		
+	}
+
+	public TransformationRessource(Transformation transformation, Ressource ressourceLost, Ressource ressourceWin) {
+		super();
+		this.transformation = transformation;
+		this.ressourceLost = ressourceLost;
+		this.ressourceWin = ressourceWin;
+	}
 	
 	/**
 	 * @return the id

@@ -1,8 +1,19 @@
 package SopraAJC.NotreProjet.models;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 @Entity
@@ -12,12 +23,20 @@ public abstract class Batiment {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonView(JsonViews.Common.class)
 	protected Integer id;
+	
+	@JsonView(JsonViews.Common.class)
 	protected String nom;
+	
+	@JsonView(JsonViews.Common.class)
 	protected double pointsDefense;
+	
+	@JsonView(JsonViews.Common.class)
 	protected boolean ameliorable;
 	
 	@OneToMany(mappedBy = "id.batiment")
+	@JsonView(JsonViews.BatimentWithCout.class)
 	protected List<CoutBatiment> coutBatiment;
 	
 	public Batiment() {

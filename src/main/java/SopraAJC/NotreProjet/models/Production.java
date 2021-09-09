@@ -17,6 +17,14 @@ public class Production extends Batiment {
 		super(nom, pointsDefense, level, ameliorable);
 		this.quantiteProduite = quantiteProduite;
 	}
+	
+	
+
+	public Production(String nom, double pointsDefense, int level, boolean ameliorable, Ressource ressource, int quantiteProduite) {
+		super(nom, pointsDefense, level, ameliorable);
+		this.ressource = ressource;
+		this.quantiteProduite = quantiteProduite;
+	}
 
 	public Ressource getRessource() {
 		return ressource;
