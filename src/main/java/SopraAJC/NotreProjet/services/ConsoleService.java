@@ -49,9 +49,9 @@ public class ConsoleService implements CommandLineRunner {
 
         LOGGER.info("Hey guys -> Spring Boot Application started");
 
-       // initBDD();
-        initRessource();
-        initBatiment();
+       initBDD();
+        //initRessource();
+        //initBatiment();
         
 
     }
