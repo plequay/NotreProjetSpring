@@ -111,7 +111,7 @@ public class AttaqueService {
 	
 	public void attackOneBatimentWithOneBatiment(Session attack, Batiment attackBatiment, Session target, Batiment targetBatiment) {
 		Optional<SessionBatiment> optAttack = sbRepo.findBySessionAndBatiment(attack, attackBatiment);
-		if(optAttack.isEmpty()) {
+		if(!optAttack.isPresent()) {
 			throw new AttaqueException();
 		}
 		SessionBatiment attackBat = optAttack.get();
@@ -122,7 +122,7 @@ public class AttaqueService {
 		sbRepo.save(attackBat);
 		
 		Optional<SessionBatiment> optTarget = sbRepo.findBySessionAndBatiment(target, targetBatiment);
-		if(optTarget.isEmpty()) {
+		if(!optTarget.isPresent()) {
 			throw new TargetException();
 		}
 		SessionBatiment targetBat = optTarget.get();
