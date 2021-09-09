@@ -1,5 +1,7 @@
 package SopraAJC.NotreProjet.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -12,15 +14,19 @@ import java.util.Set;
 public class Session {
 	
 	@EmbeddedId
+    @JsonView(JsonViews.Common.class)
     private SessionKey id;
     
     @Column(name = "a_joue_le_tours")
+    @JsonView(JsonViews.Common.class)
     private boolean aJoueLeTours;
 
     @Column(name = "tour_en_tours")
+    @JsonView(JsonViews.Common.class)
     private boolean tourEnCours;
 
     @Column(name = "a_commence")
+    @JsonView(JsonViews.Common.class)
     private boolean aCommence;
 
     private double def;
@@ -28,9 +34,11 @@ public class Session {
     private double att;
 
     @OneToMany (mappedBy = "session")
+    @JsonView({JsonViews.SessionWithSessionBatiment.class, JsonViews.SessionWithSessionBatimentAndRessource.class})
     private List<SessionBatiment> sessionBatiment;
 
     @OneToMany (mappedBy = "id.session")
+    @JsonView({JsonViews.SessionWithSessionRessource.class, JsonViews.SessionWithSessionBatimentAndRessource.class})
     private Set<SessionRessource> sessionRessource;
 
     public Session() {
