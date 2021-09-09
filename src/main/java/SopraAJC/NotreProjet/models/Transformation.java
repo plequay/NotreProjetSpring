@@ -11,17 +11,19 @@ public class Transformation  extends Batiment{
 		this.setAmeliorable(false);
 	}
 	
-	public Transformation(Integer id, String nom, int level, double def,double att,boolean ameliorable)
+	public Transformation(String nom, double def, int level,boolean ameliorable)
 	{
-		super(id, nom, level, def, att, ameliorable);
+		super(nom,  def, level, ameliorable);
+	}	
+	
+	public Transformation(Integer id, String nom, double def, int level,boolean ameliorable)
+	{
+		super(id, nom,  def, level, ameliorable);
 	}
 	
-	public Transformation(String nom, int level, double def,double att,boolean ameliorable)
+	public Transformation(String nom, double def, int level,boolean ameliorable, List<CoutBatiment> cost)
 	{
-		super(nom, level, def, att, ameliorable);
+		super(nom,  def, level, ameliorable, cost);
 	}
-	
-	public Transformation(String nom, double def, double att, int level, boolean ameliorable, List<CoutBatiment> cost) {
-		super(nom, def, att, level, ameliorable, cost);
-	}
+
 }

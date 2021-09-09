@@ -2,21 +2,8 @@ package SopraAJC.NotreProjet.services;
 
 SopraAJC.NotreProjet.models.*;
 import SopraAJC.NotreProjet.models.*;
-import SopraAJC.NotreProjet.models.Compte;
-import notreProjetBack.model.Joueur;
-import notreProjetBack.model.Partie;
-import notreProjetBack.model.Ressource;
-import notreProjetBack.model.Session;
-import notreProjetBack.model.SessionBatiment;
-import notreProjetBack.model.SessionKey;
-import notreProjetBack.model.SessionRessource;
-import notreProjetBack.model.SessionRessourceKey;
-import notreProjetBack.repositories.BatimentRepository;
-import notreProjetBack.repositories.PartieRepository;
-import notreProjetBack.repositories.RessourceRepository;
-import notreProjetBack.repositories.SessionBatimentRepository;
-import notreProjetBack.repositories.SessionRepository;
-import notreProjetBack.repositories.SessionRessourceRepository;
+import SopraAJC.NotreProjet.repositories.*;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -23,8 +23,29 @@ public abstract class Batiment {
 	
 	public Batiment() {
 		
-	}
+	}	
 	
+	public Batiment(String nom, double pointsDefense, int level, boolean ameliorable,
+			List<CoutBatiment> coutBatiment) {
+		super();
+		this.nom = nom;
+		this.pointsDefense = pointsDefense;
+		this.level = level;
+		this.ameliorable = ameliorable;
+		this.coutBatiment = coutBatiment;
+	}
+
+
+
+	public Batiment(Integer id, String nom, double pointsDefense, int level, boolean ameliorable) {
+		super();
+		this.id = id;
+		this.nom = nom;
+		this.pointsDefense = pointsDefense;
+		this.level = level;
+		this.ameliorable = ameliorable;
+	}
+
 	public Batiment(String nom, double def, int level, boolean ameliorable) {
 		super();
 		this.nom = nom;
