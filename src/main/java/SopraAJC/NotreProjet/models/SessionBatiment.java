@@ -1,6 +1,9 @@
 package SopraAJC.NotreProjet.models;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.Objects;
 
 @Entity
@@ -9,19 +12,25 @@ public class SessionBatiment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.Common.class)
     private Integer id;
 
     @ManyToOne
+    @JsonView(JsonViews.SessionBatimentWithSession.class)
     private Session session;
 
     @ManyToOne
     @JoinColumn(name = "batiment_id", foreignKey = @ForeignKey(name = "session_batiment_id_pk"))
+    @JsonView(JsonViews.SessionBatimentWithBatiment.class)
     private Batiment batiment;
     
+    @JsonView(JsonViews.Common.class)
     private double pointsDeVie;
     
+    @JsonView(JsonViews.Common.class)
     private double pointsDAttaque;
     
+    @JsonView(JsonViews.Common.class)
 	protected int level=1;
     
     public int getLevel() {
