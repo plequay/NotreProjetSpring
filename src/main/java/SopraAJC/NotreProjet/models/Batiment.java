@@ -29,7 +29,6 @@ public abstract class Batiment {
 		super();
 		this.nom = nom;
 		this.pointsDefense = pointsDefense;
-		this.level = level;
 		this.ameliorable = ameliorable;
 		this.coutBatiment = coutBatiment;
 	}
@@ -41,7 +40,6 @@ public abstract class Batiment {
 		this.id = id;
 		this.nom = nom;
 		this.pointsDefense = pointsDefense;
-		this.level = level;
 		this.ameliorable = ameliorable;
 	}
 
