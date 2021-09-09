@@ -13,8 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import SopraAJC.NotreProjet.models.Joueur;
 import SopraAJC.NotreProjet.config.AppConfig;
+import SopraAJC.NotreProjet.models.Joueur;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 
 

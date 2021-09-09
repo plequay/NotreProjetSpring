@@ -14,14 +14,14 @@ import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionKey;
-import notreProjetSpring.repositories.BatimentRepository;
-import notreProjetSpring.repositories.CompteRepository;
-import notreProjetSpring.repositories.CoutBatimentRepository;
-import notreProjetSpring.repositories.PartieRepository;
-import notreProjetSpring.repositories.RessourceRepository;
-import notreProjetSpring.repositories.SessionBatimentRepository;
-import notreProjetSpring.repositories.SessionRepository;
-import notreProjetSpring.repositories.SessionRessourceRepository;
+import SopraAJC.NotreProjet.repositories.BatimentRepository;
+import SopraAJC.NotreProjet.repositories.CompteRepository;
+import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
+import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.repositories.RessourceRepository;
+import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
+import SopraAJC.NotreProjet.repositories.SessionRepository;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 
 
 
