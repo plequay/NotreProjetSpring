@@ -10,7 +10,7 @@ import java.util.Objects;
 public class SessionRessource {
 
 	@EmbeddedId
-	private notreProjetBack.model.SessionRessourceKey id;
+	private SessionRessourceKey id;
 		    
     private int quantite;
 
@@ -18,7 +18,7 @@ public class SessionRessource {
     	
     }
 
-    public SessionRessource(notreProjetBack.model.SessionRessourceKey id, int quantite) {
+    public SessionRessource(SessionRessourceKey id, int quantite) {
 		super();
 		this.id = id;
 		this.quantite = quantite;
@@ -42,11 +42,11 @@ public class SessionRessource {
         return Objects.hash(id);
     }
 
-    public notreProjetBack.model.SessionRessourceKey getId() {
+    public SessionRessourceKey getId() {
         return id;
     }
 
-    public void setId(notreProjetBack.model.SessionRessourceKey id) {
+    public void setId(SessionRessourceKey id) {
         this.id = id;
     }
 
