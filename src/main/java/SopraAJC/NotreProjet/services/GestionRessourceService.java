@@ -4,15 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import notreProjetBack.model.Production;
-import notreProjetBack.model.Ressource;
-import notreProjetBack.model.Session;
-import notreProjetBack.model.SessionBatiment;
-import notreProjetBack.model.SessionRessource;
-import notreProjetBack.model.SessionRessourceKey;
-import notreProjetBack.repositories.RessourceRepository;
-import notreProjetBack.repositories.SessionBatimentRepository;
-import notreProjetBack.repositories.SessionRessourceRepository;
+import SopraAJC.NotreProjet.models.Ressource;
+import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.models.SessionBatiment;
+import SopraAJC.NotreProjet.models.SessionRessource;
+import SopraAJC.NotreProjet.models.SessionRessourceKey;
+import SopraAJC.NotreProjet.repositories.RessourceRepository;
+import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 
 public class GestionRessourceService {
 

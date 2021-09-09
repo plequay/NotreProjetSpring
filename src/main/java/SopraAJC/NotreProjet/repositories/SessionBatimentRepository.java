@@ -1,11 +1,13 @@
 package SopraAJC.NotreProjet.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 
@@ -23,6 +25,9 @@ public interface SessionBatimentRepository extends JpaRepository<SessionBatiment
 
 	@Query("select s from SessionBatiment s where s.session=:session and  s.batiment in(select p from Defense p)")
 	List<SessionBatiment> findBySessionAndBatimentDefense(@Param(value = "session") Session session);
+
+	@Query
+	Optional<SessionBatiment> findBySessionAndBatiment(Session session, Batiment batiment);
 
 	
 //	@Query("select s from SessionBatiment s where s.batiment")
