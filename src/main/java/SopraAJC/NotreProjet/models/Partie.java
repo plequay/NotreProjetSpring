@@ -1,5 +1,7 @@
 package SopraAJC.NotreProjet.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +12,11 @@ public class Partie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(JsonViews.Common.class)
     private Integer id;
 
     @OneToMany(mappedBy = "id.partie")
+    @JsonView(JsonViews.PartieWithSession.class)
     private List<Session> sessions = new ArrayList<>();
 
     public Partie() {

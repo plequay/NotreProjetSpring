@@ -1,7 +1,12 @@
 package SopraAJC.NotreProjet.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
 
@@ -16,6 +21,6 @@ public interface CoutBatimentRepository extends JpaRepository <CoutBatiment, Cou
 	
 //	Optional<CoutBatiment> findByBatimentAndRessource(Batiment batiment, Ressource ressource);
 	
-	
-
+	@Query("select cb from CoutBatiment cb where cb.id.batiment=:batiment and  cb.id.ressource in(select r from Ressource r)")
+	List<CoutBatiment> findAllCoutByBatiment(@Param(value="batiment") Batiment batiment);
 }

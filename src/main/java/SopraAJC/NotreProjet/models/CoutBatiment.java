@@ -3,6 +3,9 @@ package SopraAJC.NotreProjet.models;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.Objects;
 
 @Entity
@@ -10,8 +13,10 @@ import java.util.Objects;
 public class CoutBatiment {
 
 	@EmbeddedId
+	@JsonView(JsonViews.BatimentWithCout.class)
     CoutBatimentKey id;
 	
+	@JsonView(JsonViews.Common.class)
 	private int cout;
 	
 	public CoutBatiment() {

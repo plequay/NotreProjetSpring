@@ -1,9 +1,12 @@
 package SopraAJC.NotreProjet.models;
 
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
+
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Embeddable
 public class CoutBatimentKey implements Serializable {
@@ -12,6 +15,7 @@ public class CoutBatimentKey implements Serializable {
 	Batiment batiment;
 	
 	@ManyToOne
+	@JsonView(JsonViews.BatimentWithCout.class)
 	Ressource ressource;
 	
 	public CoutBatimentKey() {

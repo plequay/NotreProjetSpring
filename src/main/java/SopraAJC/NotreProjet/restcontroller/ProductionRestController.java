@@ -25,21 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.BatimentException;
-import SopraAJC.NotreProjet.models.Attaque;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
 import SopraAJC.NotreProjet.models.JsonViews;
-import SopraAJC.NotreProjet.repositories.AttaqueRepository;
+import SopraAJC.NotreProjet.models.Production;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
+import SopraAJC.NotreProjet.repositories.ProductionRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 
 @RestController
-@RequestMapping("/api/attaque")
-public class AttaqueRestController {
+@RequestMapping("/api/production")
+public class ProductionRestController {
 
 	@Autowired
-	private AttaqueRepository aRepo;
+	private ProductionRepository pRepo;
 	
 	@Autowired
 	private CoutBatimentRepository cbRepo;
@@ -49,14 +49,14 @@ public class AttaqueRestController {
 	
 	@GetMapping("")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public List<Attaque> getAllBatimentAttaque() {
-		return aRepo.findAll();
+	public List<Production> getAllBatimentProduction() {
+		return pRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque findBatimentAttaqueById(@PathVariable Integer id) {
-		Optional<Attaque> opt = aRepo.findById(id);
+	public Production findBatimentProductionById(@PathVariable Integer id) {
+		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
 			return opt.get();
 		}
@@ -66,66 +66,66 @@ public class AttaqueRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque createBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Production createBatimentProduction(@Valid @RequestBody Production production, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
-		aRepo.save(attaque);
+		pRepo.save(production);
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 			cbRepo.save(cb);
 		});
-		return attaque;
+		return production;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque replaceBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Production replaceBatimentProduction(@Valid @RequestBody Production production, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
-		Optional<Attaque> opt = aRepo.findById(id);
+		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
-			attaque.setId(id);
+			production.setId(id);
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
 				cbRepo.save(cb);
 			});
-			return aRepo.save(attaque);
+			return pRepo.save(production);
 		}
 		throw new BatimentException();
 	}
 	
 	@PatchMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque modifyBatimentAttaque(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
-		Optional<Attaque> opt = aRepo.findById(id);
+	public Production modifyBatimentProduction(@RequestBody Map<String,Object> fields, @PathVariable Integer id) {
+		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
-			Attaque batAttEnBase = opt.get();
+			Production batProdEnBase = opt.get();
 			fields.forEach((key,value) -> {
-				Field field = ReflectionUtils.findField(Attaque.class, key);
+				Field field = ReflectionUtils.findField(Production.class, key);
 				ReflectionUtils.makeAccessible(field);
-				ReflectionUtils.setField(field, batAttEnBase, value);
+				ReflectionUtils.setField(field, batProdEnBase, value);
 			});
-			return aRepo.save(batAttEnBase);
+			return pRepo.save(batProdEnBase);
 		}
 		throw new BatimentException();
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteBatimentAttaque(@PathVariable Integer id) {
-		Optional<Attaque> opt = aRepo.findById(id);
+	public void deleteBatimentProduction(@PathVariable Integer id) {
+		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
-			Attaque batAttADelete = opt.get();
-			List<CoutBatiment> cbAttADelete = batAttADelete.getCoutBatiment();
-			for(CoutBatiment cb : cbAttADelete) {
+			Production batProdADelete = opt.get();
+			List<CoutBatiment> cbProdADelete = batProdADelete.getCoutBatiment();
+			for(CoutBatiment cb : cbProdADelete) {
 				cbRepo.delete(cb);
 			}
-			aRepo.delete(batAttADelete);
+			pRepo.delete(batProdADelete);
 		}
 		throw new BatimentException();
 	}
