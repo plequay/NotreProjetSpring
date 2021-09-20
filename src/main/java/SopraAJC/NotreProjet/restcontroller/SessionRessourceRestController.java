@@ -29,7 +29,7 @@ import SopraAJC.NotreProjet.services.SessionService;
 
 @RestController
 @RequestMapping("/api/sessionressource")
-public class SessionsRessourceRestController {
+public class SessionRessourceRestController {
 
 	@Autowired
 	private GestionRessourceService gestionRessourceservice;
