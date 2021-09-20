@@ -11,6 +11,7 @@ import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.SessionRessourceKey;
+import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
@@ -32,6 +33,9 @@ public class GestionRessourceService {
 	
 	@Autowired
 	private TransformationRessourceRepository transformationRessourceRepository;
+	
+	@Autowired
+	private CoutBatimentRepository coutBatimentRepository;
 	
 	
 	/*
@@ -177,6 +181,18 @@ public class GestionRessourceService {
 	
 	public List<SessionRessource> getSessionRessourceBySession(Session session){
 		return sessionRessourceRepository.findBySession(session);
+	}
+	
+	/*
+	    * Verification que la ressource n'est pas lié à un cout batiment ou transformation ressource pour permettre la suppression
+	    * */
+	public boolean independance(Ressource ressource) {
+		if(transformationRessourceRepository.findByRessourceLost(ressource).isEmpty() &&
+		transformationRessourceRepository.findByRessourceWin(ressource).isEmpty() && 
+		coutBatimentRepository.findAllCoutByRessource(ressource).isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 }
 
