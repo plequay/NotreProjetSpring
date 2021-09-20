@@ -6,8 +6,8 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,19 +19,22 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.SessionBatimentException;
 import SopraAJC.NotreProjet.models.Batiment;
-import SopraAJC.NotreProjet.models.CompteUserDetails;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.models.Transformation;
+import SopraAJC.NotreProjet.models.TransformationRessource;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 import SopraAJC.NotreProjet.services.ConstructionBatimentService;
+import SopraAJC.NotreProjet.services.GestionRessourceService;
 
 
 @RestController
 @RequestMapping("/api/sessionbatiment")
+@CrossOrigin(origins = "*")
 public class SessionBatimentRestController {
 
 	@Autowired SessionBatimentRepository sessionBatRepo;
@@ -41,6 +44,8 @@ public class SessionBatimentRestController {
 	@Autowired ConstructionBatimentService construction;
 	@Autowired PartieRepository partieRepo;
 	@Autowired CompteRepository compteRepo;
+	
+	@Autowired GestionRessourceService gestionRessource;
 	
 	@GetMapping("")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
@@ -60,20 +65,42 @@ public class SessionBatimentRestController {
 		return sessionBatRepo.findById(id).get();
 	}
 	
-	@GetMapping("/construction/{idPartie}/{idCompte}")
-	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
-		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
+//	@GetMapping("/construction/{idPartie}/{idCompte}")
+//	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+//	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+//		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
+//		return construction.Constructible(session);
+//	}
+//	
+//	@GetMapping("/amelioration/{idPartie}/{idCompte}")
+//	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+//	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+//		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
+
+	@GetMapping("/construction/{session}")
+	public List<Batiment> BatimentConstructible(@PathVariable Session session){
 		return construction.Constructible(session);
 	}
 	
-	@GetMapping("/amelioration/{idPartie}/{idCompte}")
-	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
-		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
+	@GetMapping("/amelioration/{session}")
+	public List<SessionBatiment> batimentAmeliorable(@PathVariable Session session){
 		return construction.Ameliorable(session);
 	}
 	
+	@GetMapping("/transformation/{session}")
+	public List<SessionBatiment> batimentTransformation(@PathVariable Session session){
+		return gestionRessource.listBatimentTransformation(session);
+	}
+	
+	@GetMapping("/transformation/ressources/{transformation}")
+	public List<TransformationRessource> listTransformationRessource(@PathVariable Transformation transformation){
+		return gestionRessource.listTransformationRessource(transformation);
+	}
+	
+	@GetMapping("/transformation/ressources/{id}")
+	public TransformationRessource getTransformationRessource(@PathVariable Integer id){
+		return gestionRessource.getTransformationRessourceById(id);
+	}
 	
 	@PostMapping("")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
@@ -98,7 +125,7 @@ public class SessionBatimentRestController {
 		
 	}
 	
-	
+		
 	
 	
 	

@@ -12,31 +12,27 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import SopraAJC.NotreProjet.exceptions.SessionRessourceException;
-import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
-import SopraAJC.NotreProjet.services.PartieService;
 import SopraAJC.NotreProjet.services.SessionService;
 
 
 @RestController
 @RequestMapping("/api/sessionressource")
 @CrossOrigin(origins = "*")
-public class SessionRessourceRestController {
+public class SessionsRessourceRestController {
 
 	@Autowired
 	private GestionRessourceService gestionRessourceservice;
@@ -48,9 +44,19 @@ public class SessionRessourceRestController {
 	private SessionService sessionService;
 	
 	@Autowired
-	private GestionRessourceService gestionRessourceService;
+	private SessionRessourceRepository sessionResRepo;
 	
 
+	@GetMapping("/{idp}&{idc}")
+	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
+		Optional <Session> opt = sessionService.findSession(idp, idc );
+		if(opt.isPresent()) {
+			return sessionResRepo.findBySession(opt.get());
+		}
+		return null;
+		
+	}
+		
 	
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
@@ -83,7 +89,6 @@ public class SessionRessourceRestController {
 	//Récupérer la liste des batiments de Transformation à disposition
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
-	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
@@ -98,7 +103,6 @@ public class SessionRessourceRestController {
 	//Récupérer la liste des TransformationRessource possible pour le batiment de transformation séléctionné
 	@GetMapping("/listeTransformationRessource")
 	@ResponseStatus(HttpStatus.OK)
-	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	public List<TransformationRessource> listeBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br){
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();
@@ -118,13 +122,13 @@ public class SessionRessourceRestController {
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
-		if(session.isPresent()) {
+		if(session.isEmpty()) {
 			throw new SessionRessourceException();	
 		} 	
 		
-		//quantite de ressource suffissante
-		SessionRessource sessionRessource =gestionRessourceservice.getSessionRessource(session.get(), transformationRessource.getRessourceLost());
-		if(!gestionRessourceservice.verificationQuantiteRessource(sessionRessource, quantite)) {
+		//quantite de ressource 
+		SessionRessource sessionRessosuffissanteurce =gestionRessourceservice.getSessionRessource(session.get(), transformationRessource.getRessourceLost());
+		if(!gestionRessourceservice.verificationQuantiteRessource(sessionRessosuffissanteurce, quantite)) {
 			throw new SessionRessourceException();
 		}
 		
@@ -135,12 +139,5 @@ public class SessionRessourceRestController {
 		
 		gestionRessourceservice.transformationRessource(session.get(), transformationRessource, quantite);
 	}
-	
-	@GetMapping("/{session}")
-	@JsonView(JsonViews.SessionWithSessionRessource.class)
-	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Session session){
-		return gestionRessourceService.getSessionRessourceBySession(session);
-	}
-
 }
 

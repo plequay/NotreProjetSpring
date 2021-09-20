@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import SopraAJC.NotreProjet.models.Production;
 import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
@@ -135,6 +134,14 @@ public class GestionRessourceService {
 		return listTransformationRessource;
 	}
 	
+	/*
+	    * TransformationRessource par son id
+	    * */	
+	public TransformationRessource getTransformationRessourceById(Integer id){
+		TransformationRessource transformationRessource = transformationRessourceRepository.findById(id).get();
+		return transformationRessource;
+	}
+	
 	
 	/*
 	    * Transformer ressources
@@ -166,6 +173,10 @@ public class GestionRessourceService {
 	    * */
 	public SessionRessource getSessionRessource(Session session, Ressource ressource) {
 		return sessionRessourceRepository.findById(new SessionRessourceKey(session,ressource)).get();
+	}
+	
+	public List<SessionRessource> getSessionRessourceBySession(Session session){
+		return sessionRessourceRepository.findBySession(session);
 	}
 }
 
