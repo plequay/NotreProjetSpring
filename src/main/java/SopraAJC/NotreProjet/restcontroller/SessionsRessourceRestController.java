@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
 import SopraAJC.NotreProjet.services.SessionService;
@@ -29,6 +31,7 @@ import SopraAJC.NotreProjet.services.SessionService;
 
 @RestController
 @RequestMapping("/api/sessionressource")
+@CrossOrigin(origins = "*")
 public class SessionsRessourceRestController {
 
 	@Autowired
@@ -40,7 +43,20 @@ public class SessionsRessourceRestController {
 	@Autowired
 	private SessionService sessionService;
 	
+	@Autowired
+	private SessionRessourceRepository sessionResRepo;
+	
 
+	@GetMapping("/{idp}&{idc}")
+	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
+		Optional <Session> opt = sessionService.findSession(idp, idc );
+		if(opt.isPresent()) {
+			return sessionResRepo.findBySession(opt.get());
+		}
+		return null;
+		
+	}
+		
 	
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
@@ -110,9 +126,9 @@ public class SessionsRessourceRestController {
 			throw new SessionRessourceException();	
 		} 	
 		
-		//quantite de ressource suffissante
-		SessionRessource sessionRessource =gestionRessourceservice.getSessionRessource(session.get(), transformationRessource.getRessourceLost());
-		if(!gestionRessourceservice.verificationQuantiteRessource(sessionRessource, quantite)) {
+		//quantite de ressource 
+		SessionRessource sessionRessosuffissanteurce =gestionRessourceservice.getSessionRessource(session.get(), transformationRessource.getRessourceLost());
+		if(!gestionRessourceservice.verificationQuantiteRessource(sessionRessosuffissanteurce, quantite)) {
 			throw new SessionRessourceException();
 		}
 		
