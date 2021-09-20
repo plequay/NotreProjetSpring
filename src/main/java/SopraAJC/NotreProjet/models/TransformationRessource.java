@@ -8,17 +8,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class TransformationRessource {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonView(JsonViews.Common.class)
 	private Integer id;
 	@ManyToOne
+	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	private Transformation transformation;
 	@ManyToOne
+	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	private Ressource ressourceLost;
 	@ManyToOne
+	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	private Ressource ressourceWin;
 	
 	public TransformationRessource() {
