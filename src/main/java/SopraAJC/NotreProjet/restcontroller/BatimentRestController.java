@@ -26,14 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.BatimentException;
+import SopraAJC.NotreProjet.models.Attaque;
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
+import SopraAJC.NotreProjet.models.Defense;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
 import SopraAJC.NotreProjet.models.JsonViews;
+import SopraAJC.NotreProjet.models.Production;
+import SopraAJC.NotreProjet.models.Transformation;
+import SopraAJC.NotreProjet.repositories.AttaqueRepository;
 import SopraAJC.NotreProjet.repositories.BatimentRepository;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
+import SopraAJC.NotreProjet.repositories.DefenseRepository;
+import SopraAJC.NotreProjet.repositories.ProductionRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRepository;
 
 @RestController
 @RequestMapping("/api/batiment")
@@ -49,10 +57,46 @@ public class BatimentRestController {
 	@Autowired
 	private RessourceRepository rRepo;
 	
+	@Autowired
+	private AttaqueRepository attaqueRepo;
+	
+	@Autowired
+	private DefenseRepository defenseRepo;
+	
+	@Autowired
+	private ProductionRepository productionRepo;
+	
+	@Autowired
+	private TransformationRepository transformationRepo;
+	
 	@GetMapping("")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public List<Batiment> getAll() {
 		return bRepo.findAll();
+	}
+	
+	@GetMapping("/attaque")
+	@JsonView(JsonViews.BatimentWithCout.class)
+	public List<Attaque> getAllAttaque() {
+		return attaqueRepo.findAttaqueBatiment();
+	}
+	
+	@GetMapping("/defense")
+	@JsonView(JsonViews.BatimentWithCout.class)
+	public List<Defense> getAllDefense() {
+		return defenseRepo.findDefenseBatiment();
+	}
+	
+	@GetMapping("/production")
+	@JsonView(JsonViews.BatimentWithCoutAndRessourceProduite.class)
+	public List<Production> getAllProduction() {
+		return productionRepo.findProductionBatiment();
+	}
+	
+	@GetMapping("/transformation")
+	@JsonView(JsonViews.BatimentWithCoutAndListeTransformationRessource.class)
+	public List<Transformation> getAllTransformation() {
+		return transformationRepo.findTransformationBatiment();
 	}
 	
 	@GetMapping("/{id}")
@@ -131,4 +175,5 @@ public class BatimentRestController {
 		}
 		throw new BatimentException();
 	}
+	
 }
