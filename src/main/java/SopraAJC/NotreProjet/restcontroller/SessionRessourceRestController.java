@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import SopraAJC.NotreProjet.exceptions.SessionRessourceException;
+import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
@@ -25,6 +29,7 @@ import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
+import SopraAJC.NotreProjet.services.PartieService;
 import SopraAJC.NotreProjet.services.SessionService;
 
 
@@ -41,6 +46,9 @@ public class SessionRessourceRestController {
 	
 	@Autowired
 	private SessionService sessionService;
+	
+	@Autowired
+	private GestionRessourceService gestionRessourceService;
 	
 
 	
@@ -125,5 +133,12 @@ public class SessionRessourceRestController {
 		
 		gestionRessourceservice.transformationRessource(session.get(), transformationRessource, quantite);
 	}
+	
+	@GetMapping("/{session}")
+	@JsonView(JsonViews.SessionWithSessionRessource.class)
+	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Session session){
+		return gestionRessourceService.getSessionRessourceBySession(session);
+	}
+
 }
 
