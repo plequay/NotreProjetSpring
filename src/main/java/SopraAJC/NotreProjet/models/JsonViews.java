@@ -24,6 +24,10 @@ public class JsonViews {
 
 	public static class BatimentWithCout extends Common {}
 	
+	public static class BatimentWithCoutAndRessourceProduite extends BatimentWithCout {}
+	
+	public static class BatimentWithCoutAndListeTransformationRessource extends BatimentWithCout {}
+	
 	public static class SessionBatimentWithSession extends Common {	}
 
 	public static class SessionBatimentWithBatiment extends Common {}
