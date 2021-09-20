@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import SopraAJC.NotreProjet.exceptions.SessionRessourceException;
+import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
@@ -73,6 +76,7 @@ public class SessionsRessourceRestController {
 	//Récupérer la liste des batiments de Transformation à disposition
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
@@ -87,6 +91,7 @@ public class SessionsRessourceRestController {
 	//Récupérer la liste des TransformationRessource possible pour le batiment de transformation séléctionné
 	@GetMapping("/listeTransformationRessource")
 	@ResponseStatus(HttpStatus.OK)
+	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	public List<TransformationRessource> listeBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br){
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();

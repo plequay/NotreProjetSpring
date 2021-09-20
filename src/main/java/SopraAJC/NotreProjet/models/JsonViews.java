@@ -28,4 +28,6 @@ public class JsonViews {
 
 	public static class SessionBatimentWithBatiment extends Common {}
 	
+	public static class TransformationRessourceWithBatimentAndRessources extends Common {}
+	
 }
