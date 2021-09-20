@@ -1,5 +1,6 @@
 package SopraAJC.NotreProjet.bdd;
 
+import SopraAJC.NotreProjet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import SopraAJC.NotreProjet.models.Admin;
@@ -14,17 +15,7 @@ import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionKey;
-import notreProjetSpring.repositories.BatimentRepository;
-import notreProjetSpring.repositories.CompteRepository;
-import notreProjetSpring.repositories.CoutBatimentRepository;
-import notreProjetSpring.repositories.PartieRepository;
-import notreProjetSpring.repositories.RessourceRepository;
-import notreProjetSpring.repositories.SessionBatimentRepository;
-import notreProjetSpring.repositories.SessionRepository;
-import notreProjetSpring.repositories.SessionRessourceRepository;
-
-
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AppSpringNico {
 
@@ -52,13 +43,16 @@ public class AppSpringNico {
 	@Autowired
 	RessourceRepository ressourceRepository;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	public  void run(String[] args) {
 
-		Admin admin1 = new Admin("login", "password", "prenom",  "nom", "admin1");
-		Joueur joueur1 = new Joueur("login", "password", "prenom", "nom", "joueur1");
-		Joueur joueur2 = new Joueur("login", "password", "prenom", "nom", "joueur2");
-		Joueur joueur3 = new Joueur("login", "password", "prenom", "nom", "joueur3");
-		Joueur joueur4 = new Joueur("login", "password", "prenom", "nom", "joueur4");
+		Admin admin1 = new Admin("admin1", passwordEncoder.encode("admin1"),  "admin1", "admin1");
+		Joueur joueur1 = new Joueur( "joueur1", passwordEncoder.encode("joueur1"), "joueur1", "joueur1");
+		Joueur joueur2 = new Joueur( "joueur2",passwordEncoder.encode("joueur2"), "joueur2", "joueur2");
+		Joueur joueur3 = new Joueur( "joueur3",passwordEncoder.encode("joueur3"), "joueur3", "joueur3");
+		Joueur joueur4 = new Joueur( "joueur4",passwordEncoder.encode("joueur4"), "joueur4", "joueur4");
 
 		compteRepository.save(admin1);
 		compteRepository.save(joueur1);
