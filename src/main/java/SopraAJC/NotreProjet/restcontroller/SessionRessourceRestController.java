@@ -21,7 +21,7 @@ import SopraAJC.NotreProjet.services.PartieService;
 
 @RestController
 @RequestMapping("/api/sessionressource")
-public class SessionsRessourceRestController {
+public class SessionRessourceRestController {
 
 	@Autowired
 	private GestionRessourceService gestionRessourceservice;
