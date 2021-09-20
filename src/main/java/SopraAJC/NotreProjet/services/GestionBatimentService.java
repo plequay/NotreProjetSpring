@@ -8,7 +8,9 @@ import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class GestionBatimentService {
 
 	@Autowired
