@@ -2,6 +2,8 @@ package SopraAJC.NotreProjet.restcontroller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,8 @@ import SopraAJC.NotreProjet.models.CompteUserDetails;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
+import SopraAJC.NotreProjet.repositories.CompteRepository;
+import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 import SopraAJC.NotreProjet.services.ConstructionBatimentService;
@@ -35,11 +39,19 @@ public class SessionBatimentRestController {
 	@Autowired SessionRepository sessionRepo;
 	
 	@Autowired ConstructionBatimentService construction;
+	@Autowired PartieRepository partieRepo;
+	@Autowired CompteRepository compteRepo;
 	
 	@GetMapping("")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> getAllBySession(Session session) {
-		return sessionBatRepo.findBySession(session);	
+	public List<SessionBatiment> getAllB() {
+		return sessionBatRepo.findAll();	
+	}
+	
+	@GetMapping("/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<SessionBatiment> getAllBySession(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
+		return sessionBatRepo.findBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());	
 	}
 	
 	@GetMapping("/{id}")
@@ -48,13 +60,17 @@ public class SessionBatimentRestController {
 		return sessionBatRepo.findById(id).get();
 	}
 	
-	@GetMapping("/construction")
-	public List<Batiment> BatimentConstructible(@RequestBody Session session){
+	@GetMapping("/construction/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Constructible(session);
 	}
 	
-	@GetMapping("/amelioration")
-	public List<SessionBatiment> batimentAmeliorable(@RequestBody Session session){
+	@GetMapping("/amelioration/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Ameliorable(session);
 	}
 	
@@ -73,7 +89,7 @@ public class SessionBatimentRestController {
 	
 	@PutMapping("/{id}")		//Poser l'ID de sessionBatiment à ameliorer
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public SessionBatiment amelioration(@RequestBody Integer id) {
+	public SessionBatiment amelioration(@PathVariable Integer id) {
 		if(construction.verificationAmeliorable(sessionBatRepo.findById(id).get())) {
 			SessionBatiment sb= construction.ameliorationBat(sessionBatRepo.findById(id).get());
 			return sb;
