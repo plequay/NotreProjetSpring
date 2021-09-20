@@ -89,12 +89,12 @@ public class SessionBatimentRestController {
 	
 	@GetMapping("/transformation/{session}")
 	public List<SessionBatiment> batimentTransformation(@PathVariable Session session){
-		return gestionRessource.listBatimentTransformation(session);
+		return gestionRessource.listeBatimentTransformation(session);
 	}
 	
 	@GetMapping("/transformation/ressources/{transformation}")
 	public List<TransformationRessource> listTransformationRessource(@PathVariable Transformation transformation){
-		return gestionRessource.listTransformationRessource(transformation);
+		return gestionRessource.listeTransformationRessource(transformation);
 	}
 	
 	@GetMapping("/transformation/ressources/{id}")
