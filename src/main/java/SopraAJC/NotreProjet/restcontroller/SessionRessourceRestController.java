@@ -111,7 +111,7 @@ public class SessionRessourceRestController {
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
-		if(session.isEmpty()) {
+		if(session.isPresent()) {
 			throw new SessionRessourceException();	
 		} 	
 		
