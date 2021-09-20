@@ -2,29 +2,23 @@ package SopraAJC.NotreProjet.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import SopraAJC.NotreProjet.exceptions.RessourceException;
-import SopraAJC.NotreProjet.models.Batiment;
+
 import SopraAJC.NotreProjet.models.Production;
 import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.SessionRessourceKey;
-import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
-import SopraAJC.NotreProjet.repositories.RessourceRepository;
-import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
-import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
+
 @Service
 public class GestionRessourceService {
 
@@ -120,7 +114,7 @@ public class GestionRessourceService {
 	/*
 	    * Liste des batiment de Production de la session
 	    * */	
-	public List<SessionBatiment> listBatimentProduction(Session session){
+	public List<SessionBatiment> listeBatimentProduction(Session session){
 		List<SessionBatiment> listBatimentProduction = sessionBatimentRepository.findBySessionAndBatimentProduction(session);
 		return listBatimentProduction;
 	}
@@ -128,7 +122,7 @@ public class GestionRessourceService {
 	/*
 	    * Liste des batiment de Transformation de la session
 	    * */	
-	public List<SessionBatiment> listBatimentTransformation(Session session){
+	public List<SessionBatiment> listeBatimentTransformation(Session session){
 		List<SessionBatiment> listBatimentTransformation = sessionBatimentRepository.findBySessionAndBatimentTransformation(session);
 		return listBatimentTransformation;
 	}
@@ -136,7 +130,7 @@ public class GestionRessourceService {
 	/*
 	    * Liste des TransformationRessource pour le batiment transformation
 	    * */	
-	public List<TransformationRessource> listBatimentTransformation(Transformation transformation){
+	public List<TransformationRessource> listeTransformationRessource(Transformation transformation){
 		List<TransformationRessource> listTransformationRessource = transformationRessourceRepository.findByTransformation(transformation);
 		return listTransformationRessource;
 	}
@@ -160,4 +154,18 @@ public class GestionRessourceService {
 		sessionRessourceRepository.save(sessionRessource);		
 	}
 	
+	/*
+	    * Verification que la ressource à consommé est suffissante
+	    * */
+	public boolean verificationQuantiteRessource (SessionRessource sessionRessource, int quantite) {
+		return sessionRessource.getQuantite()>=quantite;
+	}
+	
+	/*
+	    * récupération d'une sessionRessource à partir de la session et la ressource
+	    * */
+	public SessionRessource getSessionRessource(Session session, Ressource ressource) {
+		return sessionRessourceRepository.findById(new SessionRessourceKey(session,ressource)).get();
+	}
 }
+
