@@ -60,7 +60,7 @@ public class SessionRessourceRestController {
 	@Autowired
 	private GestionRessourceService gestionRessourceService;
 	@GetMapping("/{idp}&{idc}")
-	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
+	public List<SessionRessource> getBySession(@PathVariable Long idp, @PathVariable Long idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc );
 		if(opt.isPresent()) {
 			return sessionResRepo.findBySession(opt.get());
@@ -75,7 +75,7 @@ public class SessionRessourceRestController {
 	
 	@GetMapping("/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionWithSessionRessource.class)
-	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Integer idPartie, Integer idCompte){
+	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Long idPartie, Long idCompte){
 		return gestionRessourceService.getSessionRessourceBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 	
@@ -143,14 +143,8 @@ public class SessionRessourceRestController {
 	//Transformation d'une ressource
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
-//<<<<<<< HEAD
-//	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, @Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
-//		//transformationRessource Valide
-//		if(br.hasErrors()) {
-//			throw new SessionRessourceException();
-//		}
-//=======
-	public void transformationRessource(@Valid @RequestBody TransformationRessource transformationRessource, BindingResult br , @RequestBody Long idp, @RequestBody Long idc, @RequestBody int quantite) {
+
+	public void transformationRessource(@PathVariable Long idp, @PathVariable Long idc, BindingResult br ,@Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
 		//transformationRessource Valide
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();
