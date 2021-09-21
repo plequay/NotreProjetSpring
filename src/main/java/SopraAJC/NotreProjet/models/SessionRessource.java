@@ -3,6 +3,9 @@ package SopraAJC.NotreProjet.models;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.Objects;
 
 @Entity
@@ -10,8 +13,9 @@ import java.util.Objects;
 public class SessionRessource {
 
 	@EmbeddedId
+	@JsonView(JsonViews.SessionWithAll.class)
 	private SessionRessourceKey id;
-		    
+	@JsonView(JsonViews.SessionWithAll.class)	    
     private int quantite;
 
     public SessionRessource() {

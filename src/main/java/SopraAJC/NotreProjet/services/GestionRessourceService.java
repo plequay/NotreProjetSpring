@@ -70,7 +70,7 @@ public class GestionRessourceService {
 		sessionRessource.setQuantite(sessionRessource.getQuantite()+npierre);
 		sessionRessourceRepository.save(sessionRessource);
 		
-		Ressource rminerais = ressourceRepository.findByNom("bois").get();
+		Ressource rminerais = ressourceRepository.findByNom("minerais").get();
 		srk = new SessionRessourceKey(session, rminerais);
 		sessionRessource = sessionRessourceRepository.findById(srk).get();
 		sessionRessource.setQuantite(sessionRessource.getQuantite()+nminerais);
