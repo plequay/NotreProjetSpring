@@ -10,13 +10,15 @@ public class JsonViews {
 
 	public static class SessionWithSessionRessource extends Common {}
 
-	public static class SessionWithSessionBatimentAndRessource extends Common {}
+	
 
 	public static class SessionWithPartie extends Common {}
 
 	public static class SessionWithCompte extends Common {}
 
 	public static class SessionWithPartieAndCompte extends Common {}
+	
+	public static class SessionWithAll extends SessionWithPartieAndCompte {}
 
 	public static class CompteWithSession extends Common {}
 
@@ -27,5 +29,6 @@ public class JsonViews {
 	public static class SessionBatimentWithSession extends Common {	}
 
 	public static class SessionBatimentWithBatiment extends Common {}
+	
 	
 }

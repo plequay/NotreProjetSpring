@@ -23,6 +23,7 @@ import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
 import SopraAJC.NotreProjet.services.SessionService;
@@ -41,7 +42,18 @@ public class SessionRessourceRestController {
 	
 	@Autowired
 	private SessionService sessionService;
+	@Autowired
+	private SessionRessourceRepository sessionResRepo;
 	
+	@GetMapping("/{idp}&{idc}")
+	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
+		Optional <Session> opt = sessionService.findSession(idp, idc );
+		if(opt.isPresent()) {
+			return sessionResRepo.findBySession(opt.get());
+		}
+		return null;
+		
+	}
 
 	
 	//Piocher des cartes en début de tour

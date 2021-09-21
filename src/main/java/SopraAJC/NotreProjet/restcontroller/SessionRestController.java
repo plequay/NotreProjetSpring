@@ -24,13 +24,20 @@ public class SessionRestController {
 
     @Autowired
     SessionRepository sessionRepository;
+    
 
     @GetMapping("")
-    @JsonView(JsonViews.SessionWithPartieAndCompte.class)
+    @JsonView(JsonViews.SessionWithAll.class)
     public List<Session> allSession(){
 
         return sessionRepository.findAll();
 
+    }
+    
+    @GetMapping("/{idPartie}/{idCompte}")
+    @JsonView(JsonViews.SessionWithPartieAndCompte.class)
+    public Session findByCompteAndPartie(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
+    	return sessionService.findSession(idPartie, idCompte).get();
     }
 
     @PostMapping("")

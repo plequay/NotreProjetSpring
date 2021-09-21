@@ -4,6 +4,8 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import SopraAJC.NotreProjet.models.JsonViews.SessionWithAll;
+
 import java.util.Objects;
 
 @Entity
@@ -21,7 +23,7 @@ public class SessionBatiment {
 
     @ManyToOne
     @JoinColumn(name = "batiment_id", foreignKey = @ForeignKey(name = "session_batiment_id_pk"))
-    @JsonView(JsonViews.SessionBatimentWithBatiment.class)
+    @JsonView({JsonViews.SessionBatimentWithBatiment.class, JsonViews.SessionWithSessionBatiment.class, SessionWithAll.class})
     private Batiment batiment;
     
     @JsonView(JsonViews.Common.class)
@@ -32,6 +34,7 @@ public class SessionBatiment {
     
     @JsonView(JsonViews.Common.class)
 	protected int level=1;
+    
     
     public int getLevel() {
 		return level;
