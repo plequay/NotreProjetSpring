@@ -44,7 +44,7 @@ public class SessionRestController {
     
 
     @GetMapping("/{idPartie}/{idCompte}")
-    @JsonView(JsonViews.SessionWithPartieAndCompte.class)
+    @JsonView(JsonViews.SessionWithAll.class)
     public Session getSession(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
     	return sessionRepository.findByPartieAndCompte(pRepo.findById(idPartie).get(),cRepo.findById(idCompte).get()).get();
     }
@@ -56,12 +56,6 @@ public class SessionRestController {
 
         return sessionRepository.findAll();
 
-    }
-    
-    @GetMapping("/{idPartie}/{idCompte}")
-    @JsonView(JsonViews.SessionWithPartieAndCompte.class)
-    public Session findByCompteAndPartie(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
-    	return sessionService.findSession(idPartie, idCompte).get();
     }
 
     @PostMapping("")
