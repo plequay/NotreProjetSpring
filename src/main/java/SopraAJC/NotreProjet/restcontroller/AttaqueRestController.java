@@ -54,7 +54,7 @@ public class AttaqueRestController {
 	public List<Attaque> getAllBatimentAttaque() {
 		return aRepo.findAll();
 	}
-	
+
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public Attaque findBatimentAttaqueById(@PathVariable Integer id) {
