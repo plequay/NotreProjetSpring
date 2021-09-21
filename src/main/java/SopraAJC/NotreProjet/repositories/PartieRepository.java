@@ -10,7 +10,7 @@ import SopraAJC.NotreProjet.models.Partie;
 import SopraAJC.NotreProjet.models.Session;
 
 
-public interface PartieRepository extends JpaRepository <Partie, Integer> {
+public interface PartieRepository extends JpaRepository <Partie, Long> {
 
 
 }

@@ -45,7 +45,7 @@ public class SessionRessourceRestController {
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public String piocher(@PathVariable Integer idp, @PathVariable Integer idc) {		
+	public String piocher(@PathVariable Long idp, @PathVariable Long idc) {
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -59,7 +59,7 @@ public class SessionRessourceRestController {
 	//Produire les ressources grâce aux batiments de production
 	@GetMapping("/productionRessource/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<String> productionRessource(@PathVariable Integer idp, @PathVariable Integer idc){
+	public List<String> productionRessource(@PathVariable Long idp, @PathVariable Long idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -73,7 +73,7 @@ public class SessionRessourceRestController {
 	//Récupérer la liste des batiments de Transformation à disposition
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
-	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
+	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Long idp, @PathVariable Long idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -98,7 +98,7 @@ public class SessionRessourceRestController {
 	//Transformation d'une ressource
 	@PostMapping("/transformationRessource")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void transformationRessource(@Valid @RequestBody TransformationRessource transformationRessource, BindingResult br ,@RequestBody Integer idp, @RequestBody Integer idc,@RequestBody int quantite) {
+	public void transformationRessource(@Valid @RequestBody TransformationRessource transformationRessource, BindingResult br ,@RequestBody Long idp, @RequestBody Long idc,@RequestBody int quantite) {
 		//transformationRessource Valide
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();

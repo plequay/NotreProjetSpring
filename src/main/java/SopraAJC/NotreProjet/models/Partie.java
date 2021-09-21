@@ -13,7 +13,7 @@ public class Partie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(JsonViews.Common.class)
-    private Integer id;
+    private  Long id;
 
     @OneToMany(mappedBy = "id.partie")
     @JsonView(JsonViews.PartieWithSession.class)
@@ -35,11 +35,11 @@ public class Partie {
         return Objects.hash(id);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

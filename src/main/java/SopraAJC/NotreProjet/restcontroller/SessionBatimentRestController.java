@@ -50,7 +50,7 @@ public class SessionBatimentRestController {
 	
 	@GetMapping("/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> getAllBySession(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
+	public List<SessionBatiment> getAllBySession(@PathVariable Long idPartie, @PathVariable Long idCompte) {
 		return sessionBatRepo.findBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());	
 	}
 	
@@ -62,14 +62,14 @@ public class SessionBatimentRestController {
 	
 	@GetMapping("/construction/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+	public List<Batiment> BatimentConstructible(@PathVariable Long idPartie, @PathVariable Long idCompte){
 		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Constructible(session);
 	}
 	
 	@GetMapping("/amelioration/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+	public List<SessionBatiment> batimentAmeliorable(@PathVariable Long idPartie, @PathVariable Long idCompte){
 		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Ameliorable(session);
 	}
