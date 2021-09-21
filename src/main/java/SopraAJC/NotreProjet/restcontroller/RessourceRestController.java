@@ -23,6 +23,7 @@ import SopraAJC.NotreProjet.exceptions.RessourceException;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
+import SopraAJC.NotreProjet.services.GestionRessourceService;
 
 @RestController
 @RequestMapping("/api/ressource")
@@ -31,6 +32,9 @@ public class RessourceRestController {
 
 	@Autowired
 	RessourceRepository ressourceRepo;
+	
+	@Autowired
+	GestionRessourceService ressourceService;
 	
 	@GetMapping("")
 	@JsonView(JsonViews.Common.class)
@@ -76,6 +80,16 @@ public class RessourceRestController {
 		if(opt.isPresent()) {
 			ressource.setId(id);
 			return ressourceRepo.save(ressource);
+		}
+		throw new RessourceException();
+	}
+	
+	@GetMapping("/independant/{id}")
+	@JsonView(JsonViews.Common.class)
+	public boolean independante(@PathVariable Integer id) {
+		Optional<Ressource> opt =ressourceRepo.findById(id);
+		if(opt.isPresent()) {
+			return ressourceService.independance(opt.get()) ;
 		}
 		throw new RessourceException();
 	}

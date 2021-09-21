@@ -17,12 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import SopraAJC.NotreProjet.exceptions.SessionRessourceException;
+import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
+import SopraAJC.NotreProjet.repositories.CompteRepository;
+import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.repositories.SessionRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
@@ -41,10 +48,21 @@ public class SessionRessourceRestController {
 	private GestionBatimentService gestionBatimentservice;
 	
 	@Autowired
+	private SessionRepository sessionRepo;
+	
+	@Autowired 
+	private PartieRepository partieRepo;
+	
+	@Autowired 
+	private CompteRepository compteRepo;
+	
+	@Autowired
 	private SessionService sessionService;
 	@Autowired
 	private SessionRessourceRepository sessionResRepo;
 	
+	@Autowired
+	private GestionRessourceService gestionRessourceService;
 	@GetMapping("/{idp}&{idc}")
 	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc );
@@ -55,6 +73,15 @@ public class SessionRessourceRestController {
 		
 	}
 
+	
+	@Autowired
+	private TransformationRessourceRepository transformationRessourceRepo;
+	
+	@GetMapping("/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionWithSessionRessource.class)
+	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Integer idPartie, Integer idCompte){
+		return gestionRessourceService.getSessionRessourceBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
+	}
 	
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
@@ -87,6 +114,7 @@ public class SessionRessourceRestController {
 	//Récupérer la liste des batiments de Transformation à disposition
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
@@ -101,6 +129,7 @@ public class SessionRessourceRestController {
 	//Récupérer la liste des TransformationRessource possible pour le batiment de transformation séléctionné
 	@GetMapping("/listeTransformationRessource")
 	@ResponseStatus(HttpStatus.OK)
+	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	public List<TransformationRessource> listeBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br){
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();
@@ -110,9 +139,9 @@ public class SessionRessourceRestController {
 	}
 	
 	//Transformation d'une ressource
-	@PostMapping("/transformationRessource")
+	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void transformationRessource(@Valid @RequestBody TransformationRessource transformationRessource, BindingResult br ,@RequestBody Integer idp, @RequestBody Integer idc,@RequestBody int quantite) {
+	public void transformationRessource(@Valid @PathVariable Integer idtr, BindingResult br ,@PathVariable Integer idp, @PathVariable Integer idc,@PathVariable int quantite) {
 		//transformationRessource Valide
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();
@@ -125,17 +154,18 @@ public class SessionRessourceRestController {
 		} 	
 		
 		//quantite de ressource suffissante
-		SessionRessource sessionRessource =gestionRessourceservice.getSessionRessource(session.get(), transformationRessource.getRessourceLost());
+		SessionRessource sessionRessource =gestionRessourceservice.getSessionRessource(session.get(), transformationRessourceRepo.findById(idtr).get().getRessourceLost());
 		if(!gestionRessourceservice.verificationQuantiteRessource(sessionRessource, quantite)) {
 			throw new SessionRessourceException();
 		}
 		
 		//Batiment de Transformation possédé
-		if(!gestionBatimentservice.verificationPossessionbatiment(session.get(), transformationRessource.getTransformation())) {
+		if(!gestionBatimentservice.verificationPossessionbatiment(session.get(), transformationRessourceRepo.findById(idtr).get().getTransformation())) {
 			throw new SessionRessourceException();
 		}
 		
-		gestionRessourceservice.transformationRessource(session.get(), transformationRessource, quantite);
+		gestionRessourceservice.transformationRessource(session.get(), transformationRessourceRepo.findById(idtr).get(), quantite);
 	}
+
 }
 

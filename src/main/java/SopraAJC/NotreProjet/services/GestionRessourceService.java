@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import SopraAJC.NotreProjet.models.Production;
 import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.models.SessionRessourceKey;
+import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
@@ -33,6 +33,9 @@ public class GestionRessourceService {
 	
 	@Autowired
 	private TransformationRessourceRepository transformationRessourceRepository;
+	
+	@Autowired
+	private CoutBatimentRepository coutBatimentRepository;
 	
 	
 	/*
@@ -135,6 +138,14 @@ public class GestionRessourceService {
 		return listTransformationRessource;
 	}
 	
+	/*
+	    * TransformationRessource par son id
+	    * */	
+	public TransformationRessource getTransformationRessourceById(Integer id){
+		TransformationRessource transformationRessource = transformationRessourceRepository.findById(id).get();
+		return transformationRessource;
+	}
+	
 	
 	/*
 	    * Transformer ressources
@@ -166,6 +177,22 @@ public class GestionRessourceService {
 	    * */
 	public SessionRessource getSessionRessource(Session session, Ressource ressource) {
 		return sessionRessourceRepository.findById(new SessionRessourceKey(session,ressource)).get();
+	}
+	
+	public List<SessionRessource> getSessionRessourceBySession(Session session){
+		return sessionRessourceRepository.findBySession(session);
+	}
+	
+	/*
+	    * Verification que la ressource n'est pas lié à un cout batiment ou transformation ressource pour permettre la suppression
+	    * */
+	public boolean independance(Ressource ressource) {
+		if(transformationRessourceRepository.findByRessourceLost(ressource).isEmpty() &&
+		transformationRessourceRepository.findByRessourceWin(ressource).isEmpty() && 
+		coutBatimentRepository.findAllCoutByRessource(ressource).isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 }
 

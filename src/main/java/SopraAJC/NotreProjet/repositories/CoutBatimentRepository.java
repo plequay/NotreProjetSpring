@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
+import SopraAJC.NotreProjet.models.Ressource;
 
 
 
@@ -23,4 +24,7 @@ public interface CoutBatimentRepository extends JpaRepository <CoutBatiment, Cou
 	
 	@Query("select cb from CoutBatiment cb where cb.id.batiment=:batiment and  cb.id.ressource in(select r from Ressource r)")
 	List<CoutBatiment> findAllCoutByBatiment(@Param(value="batiment") Batiment batiment);
+	
+	@Query("select cb from CoutBatiment cb where cb.id.ressource=:ressource")
+	List<CoutBatiment> findAllCoutByRessource(@Param(value="ressource") Ressource ressource);
 }

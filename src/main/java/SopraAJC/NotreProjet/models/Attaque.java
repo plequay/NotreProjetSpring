@@ -2,10 +2,13 @@ package SopraAJC.NotreProjet.models;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 
 @Entity
 public class Attaque extends Batiment {
 	
+	@JsonView(JsonViews.Common.class)
 	private double pointsDAttaque;
 	
 	public Attaque() {

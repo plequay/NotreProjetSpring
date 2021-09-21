@@ -5,10 +5,13 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class Transformation  extends Batiment{
 
 	@OneToMany(mappedBy = "transformation")
+	@JsonView(JsonViews.BatimentWithCoutAndListeTransformationRessource.class)
 	private List<TransformationRessource> transformationRessouce;
 	
 	public Transformation() {
