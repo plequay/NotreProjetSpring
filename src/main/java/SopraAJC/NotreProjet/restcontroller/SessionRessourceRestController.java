@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +23,13 @@ import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
-import SopraAJC.NotreProjet.models.Transformation;
 import SopraAJC.NotreProjet.models.TransformationRessource;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
-import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
 import SopraAJC.NotreProjet.services.SessionService;
@@ -49,6 +48,9 @@ public class SessionRessourceRestController {
 	
 	@Autowired
 	private SessionRepository sessionRepo;
+	
+	@Autowired
+	private TransformationRepository transfoRepo;
 	
 	@Autowired 
 	private PartieRepository partieRepo;
@@ -127,14 +129,11 @@ public class SessionRessourceRestController {
 	}
 	
 	//Récupérer la liste des TransformationRessource possible pour le batiment de transformation séléctionné
-	@GetMapping("/listeTransformationRessource")
+	@GetMapping("/listeTransformationRessource/{idBatiment}")
 	@ResponseStatus(HttpStatus.OK)
 	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
-	public List<TransformationRessource> listeBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br){
-		if(br.hasErrors()) {
-			throw new SessionRessourceException();
-		}
-		List<TransformationRessource> listTransformationRessource = gestionRessourceservice.listeTransformationRessource(transformation) ;
+	public List<TransformationRessource> listeBatimentTransformation(@Valid @PathVariable Integer idBatiment){
+		List<TransformationRessource> listTransformationRessource = gestionRessourceservice.listeTransformationRessource(transfoRepo.findById(idBatiment).get()) ;
 		return listTransformationRessource;
 	}
 	
