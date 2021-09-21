@@ -88,7 +88,7 @@ public class SessionRessourceRestController {
 	@ResponseStatus(HttpStatus.OK)
 	public String piocher(@PathVariable Integer idp, @PathVariable Integer idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc);
-		
+		System.out.println(opt.get());
 		if(opt.isPresent()) {
 			String message = gestionRessourceservice.piocherRessource(opt.get());
 			return message;

@@ -4,6 +4,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,6 +18,7 @@ public class SessionRessourceKey implements Serializable{
 	
 	@ManyToOne
     @JoinColumn(name = "ressource_id", foreignKey = @ForeignKey(name = "session_ressource_id_pk"))
+	@JsonView(JsonViews.SessionWithAll.class)
     private Ressource ressource;
 
 	public SessionRessourceKey() {
