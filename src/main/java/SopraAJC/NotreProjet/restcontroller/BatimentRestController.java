@@ -124,6 +124,8 @@ public class BatimentRestController {
 		return batiment;
 	}
 	
+	
+	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public Batiment replace(@Valid @RequestBody Batiment batiment, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
