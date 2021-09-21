@@ -2,6 +2,9 @@ package SopraAJC.NotreProjet.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,8 @@ import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 @Service
 public class GestionRessourceService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(GestionRessourceService.class);
+	
 	@Autowired
 	private SessionRessourceRepository sessionRessourceRepository;
 	
@@ -151,7 +156,7 @@ public class GestionRessourceService {
 	    * Transformer ressources
 	    * */
 	public void transformationRessource(Session session, TransformationRessource transformationRessource,int quantite) {
-		
+		LOGGER.info("session:"+session);
 		//Diminue la ressource transformé
 		SessionRessourceKey srk = new SessionRessourceKey(session, transformationRessource.getRessourceLost());
 		SessionRessource sessionRessource = sessionRessourceRepository.findById(srk).get();

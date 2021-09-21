@@ -137,18 +137,27 @@ public class SessionRessourceRestController {
 		return listTransformationRessource;
 	}
 	
+	//Récupérer une TransformationRessource
+		@GetMapping("/transformationRessource/{idtr}")
+		@ResponseStatus(HttpStatus.OK)
+		@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
+		public TransformationRessource getTransformationRessource(@Valid @PathVariable Integer idtr){
+			TransformationRessource transformationRessource = gestionRessourceservice.getTransformationRessourceById(idtr) ;
+			return transformationRessource;
+		}
+	
 	//Transformation d'une ressource
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void transformationRessource(@Valid @PathVariable Integer idtr, BindingResult br ,@PathVariable Integer idp, @PathVariable Integer idc,@PathVariable int quantite) {
-		//transformationRessource Valide
-		if(br.hasErrors()) {
-			throw new SessionRessourceException();
-		}
+	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, @Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
+//		//transformationRessource Valide
+//		if(br.hasErrors()) {
+//			throw new SessionRessourceException();
+//		}
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
-		if(session.isPresent()) {
+		if(!session.isPresent()) {
 			throw new SessionRessourceException();	
 		} 	
 		
