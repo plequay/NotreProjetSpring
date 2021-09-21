@@ -53,12 +53,6 @@ public class SessionRestController {
         return sessionRepository.findAll();
 
     }
-    
-    @GetMapping("/{idPartie}/{idCompte}")
-    @JsonView(JsonViews.SessionWithPartieAndCompte.class)
-    public Session findByCompteAndPartie(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
-    	return sessionService.findSession(idPartie, idCompte).get();
-    }
 
     @PostMapping("")
     @JsonView(JsonViews.SessionWithPartieAndCompte.class)
@@ -70,10 +64,16 @@ public class SessionRestController {
         return session;
     }
     
-    @PutMapping(value = "")
+    @PutMapping(value = "/roulement/{idPartie}/{idCompte}")
     @JsonView(JsonViews.SessionWithAll.class)
-	public Session update (Session session) {
-    	sessionRepository.save(session);		
+	public Session invertTourEnCours (@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
+    	Session session = sessionRepository.findByPartieAndCompte(pRepo.findById(idPartie).get() , cRepo.findById(idCompte).get()).get();
+    	if (session.isTourEnCours()) {
+    		session.setTourEnCours(false);
+    	}else {
+    		session.setTourEnCours(true);
+    	}
+    	sessionRepository.save(session);
 		return session;
 	}
 
