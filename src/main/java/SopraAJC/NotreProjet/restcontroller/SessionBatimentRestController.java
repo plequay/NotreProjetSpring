@@ -101,19 +101,7 @@ public class SessionBatimentRestController {
 	public List<SessionBatiment> batimentTransformation(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		return gestionRessource.listeBatimentTransformation(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
-	
-	@GetMapping("/transformation/ressources/{transformation}")
-	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<TransformationRessource> listTransformationRessource(@PathVariable Transformation transformation){
-		return gestionRessource.listeTransformationRessource(transformation);
-	}
-	
-	@GetMapping("/transformation/ressources/{id}")
-	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public TransformationRessource getTransformationRessource(@PathVariable Integer id){
-		return gestionRessource.getTransformationRessourceById(id);
-	}
-	
+
 	@PostMapping("/construction/{idPartie}/{idCompte}/{idBat}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public SessionBatiment construction(@PathVariable Integer idPartie,@PathVariable Integer idCompte, @PathVariable Integer idBat) {
@@ -136,12 +124,5 @@ public class SessionBatimentRestController {
 		throw new SessionBatimentException();
 		
 	}
-	
-		
-	
-	
-	
-	
-	
 	
 }
