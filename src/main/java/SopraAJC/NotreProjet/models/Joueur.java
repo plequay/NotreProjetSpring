@@ -14,7 +14,7 @@ public class Joueur extends Compte{
 		super(login, password);
 	}
 	
-	public Joueur (Integer id, String login, String password){
+	public Joueur (Long id, String login, String password){
 		super(id, login, password);
 	}
 	
@@ -22,7 +22,7 @@ public class Joueur extends Compte{
 		super(username, password, prenom, nom, Role.ROLE_JOUEUR);
 	}
 	
-	public Joueur (Integer id, String login, String password, String prenom, String nom, Role role){
+	public Joueur (Long id, String login, String password, String prenom, String nom, Role role){
 		super(id, login, password, prenom, nom, Role.ROLE_JOUEUR);
 	}
 }

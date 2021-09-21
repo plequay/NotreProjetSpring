@@ -8,13 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -88,7 +82,7 @@ public class SessionRessourceRestController {
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public String piocher(@PathVariable Integer idp, @PathVariable Integer idc) {		
+	public String piocher(@PathVariable Long idp, @PathVariable Long idc) {
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		System.out.println(opt.get());
 		if(opt.isPresent()) {
@@ -102,7 +96,7 @@ public class SessionRessourceRestController {
 	//Produire les ressources grâce aux batiments de production
 	@GetMapping("/productionRessource/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<String> productionRessource(@PathVariable Integer idp, @PathVariable Integer idc){
+	public List<String> productionRessource(@PathVariable Long idp, @PathVariable Long idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -117,7 +111,7 @@ public class SessionRessourceRestController {
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
+	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Long idp, @PathVariable Long idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -137,18 +131,35 @@ public class SessionRessourceRestController {
 		return listTransformationRessource;
 	}
 	
+	//Récupérer une TransformationRessource
+		@GetMapping("/transformationRessource/{idtr}")
+		@ResponseStatus(HttpStatus.OK)
+		@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
+		public TransformationRessource getTransformationRessource(@Valid @PathVariable Integer idtr){
+			TransformationRessource transformationRessource = gestionRessourceservice.getTransformationRessourceById(idtr) ;
+			return transformationRessource;
+		}
+	
 	//Transformation d'une ressource
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void transformationRessource(@Valid @PathVariable Integer idtr, BindingResult br ,@PathVariable Integer idp, @PathVariable Integer idc,@PathVariable int quantite) {
+//<<<<<<< HEAD
+//	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, @Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
+//		//transformationRessource Valide
+//		if(br.hasErrors()) {
+//			throw new SessionRessourceException();
+//		}
+//=======
+	public void transformationRessource(@Valid @RequestBody TransformationRessource transformationRessource, BindingResult br , @RequestBody Long idp, @RequestBody Long idc, @RequestBody int quantite) {
 		//transformationRessource Valide
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();
 		}
+//>>>>>>> nico
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
-		if(session.isPresent()) {
+		if(!session.isPresent()) {
 			throw new SessionRessourceException();	
 		} 	
 		

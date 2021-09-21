@@ -58,47 +58,100 @@ public class DefenseRestController {
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public Defense findBatimentDefenseById(@PathVariable Integer id) {
-		Optional<Defense> opt = dRepo.findById(id);
+		Optional<Defense> opt = dRepo.findByIdWithCoutBatiment(id);
+		System.out.println(opt.get().getCoutBatiment());
 		if(opt.isPresent()) {
 			return opt.get();
 		}
+		else {
 		throw new BatimentException();
+		}
 	}
+	
+//	@PostMapping("")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	@JsonView(JsonViews.BatimentWithCout.class)
+//	public Defense createBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+//		if (br.hasErrors()) {
+//			System.out.println("ici");
+//			throw new BatimentException();
+//		}
+//		dRepo.save(defense);
+//		list.stream().forEach(cbd -> {
+//			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+//			cbRepo.save(cb);
+//		});
+//		return defense;
+//	}
 	
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Defense createBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Defense createBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
 		dRepo.save(defense);
+		
+		List<CoutBatiment> list = defense.getCoutBatiment();
+		if(!(list == null)) {
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,cbd.getId().getRessource()),cbd.getCout());
 			cbRepo.save(cb);
 		});
+		}
 		return defense;
 	}
 	
+	
+//	@PutMapping("/{id}")
+//	@JsonView(JsonViews.BatimentWithCout.class)
+//	public Defense replaceBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+//		if(br.hasErrors()) {
+//			throw new BatimentException();
+//		}
+//		Optional<Defense> opt = dRepo.findById(id);
+//		if(opt.isPresent()) {
+//			defense.setId(id);
+//			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
+//				cbRepo.delete(cb);
+//			}
+//			list.stream().forEach(cbd -> {
+//				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+//				cbRepo.save(cb);
+//			});
+//			return dRepo.save(defense);
+//		}
+//		throw new BatimentException();
+//	}
+	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Defense replaceBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Defense replaceBatimentDefense(@Valid @RequestBody Defense defense, BindingResult br, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
 		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
-			defense.setId(id);
+			defense.setId(id);			
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
+				System.out.println("ici");
 				cbRepo.delete(cb);
 			}
+			System.out.println("là");
+			List<CoutBatiment> list = defense.getCoutBatiment();
+			if(!(list == null)) {
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+//				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(defense,cbd.getId().getRessource()),cbd.getCout());
 				cbRepo.save(cb);
 			});
+			}
+			defense.setCost(null);
 			return dRepo.save(defense);
+		}else {
+			throw new BatimentException();
 		}
-		throw new BatimentException();
 	}
 	
 	@PatchMapping("/{id}")
@@ -129,6 +182,8 @@ public class DefenseRestController {
 			}
 			dRepo.delete(batDefADelete);
 		}
+		else {
 		throw new BatimentException();
+		}
 	}
 }

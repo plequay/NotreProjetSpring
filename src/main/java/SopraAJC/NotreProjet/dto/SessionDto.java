@@ -2,8 +2,8 @@ package SopraAJC.NotreProjet.dto;
 
 public class SessionDto {
 
-    private Integer partieId;
-    private Integer compteId;
+    private Long partieId;
+    private Long compteId;
     private boolean aJoueLeTours;
     private boolean tourEnCours;
     private boolean aCommence;
@@ -11,19 +11,19 @@ public class SessionDto {
     public SessionDto() {
     }
 
-    public Integer getPartieId() {
+    public Long getPartieId() {
         return partieId;
     }
 
-    public void setPartieId(Integer partieId) {
+    public void setPartieId(Long partieId) {
         this.partieId = partieId;
     }
 
-    public Integer getCompteId() {
+    public Long getCompteId() {
         return compteId;
     }
 
-    public void setCompteId(Integer compteId) {
+    public void setCompteId(Long compteId) {
         this.compteId = compteId;
     }
 

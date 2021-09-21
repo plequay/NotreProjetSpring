@@ -30,13 +30,31 @@ public class CompteService {
 	@Autowired
 	AdminRepository adminRepository;
 
-	public Compte compteExistsInDB(Integer id){
+	public Compte compteExistsInDB(Long id){
 		LOGGER.info("id: " + id);
 		Optional<Compte> opt = compteRepository.findById(id);
 		if (opt.isPresent()){
 			return opt.get();
 		}
 		throw new CompteException();
+	}
+
+	public Compte compteIsInDatabaseByUsername(String username){
+		LOGGER.info("username: " + username);
+		Optional<Compte> opt = compteRepository.findByUsername(username);
+		if (opt.isPresent()){
+			return opt.get();
+		}
+		throw new CompteException();
+	}
+
+	public Boolean isUsernameInDatabase(String username) {
+		LOGGER.info("username: " + username);
+		Optional<Compte> opt = compteRepository.findByUsername(username);
+		if (opt.isPresent()){
+			return true;
+		}
+		return false;
 	}
 
 /*	public static Joueur saveNewJoueur(Joueur joueur){
