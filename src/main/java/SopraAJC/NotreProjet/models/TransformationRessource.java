@@ -21,10 +21,10 @@ public class TransformationRessource {
 	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
 	private Transformation transformation;
 	@ManyToOne
-	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
+	@JsonView({JsonViews.TransformationRessourceWithBatimentAndRessources.class, JsonViews.BatimentWithCoutAndListeTransformationRessource.class})
 	private Ressource ressourceLost;
 	@ManyToOne
-	@JsonView(JsonViews.TransformationRessourceWithBatimentAndRessources.class)
+	@JsonView({JsonViews.TransformationRessourceWithBatimentAndRessources.class, JsonViews.BatimentWithCoutAndListeTransformationRessource.class})
 	private Ressource ressourceWin;
 	
 	public TransformationRessource() {
