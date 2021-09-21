@@ -30,7 +30,7 @@ public class CompteService {
 	@Autowired
 	AdminRepository adminRepository;
 
-	public Compte compteExistsInDB(Long id){
+	public Compte compteExistsInDB(Integer id){
 		LOGGER.info("id: " + id);
 		Optional<Compte> opt = compteRepository.findById(id);
 		if (opt.isPresent()){

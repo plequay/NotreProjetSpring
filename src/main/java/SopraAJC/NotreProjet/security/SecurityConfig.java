@@ -34,18 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//<<<<<<< HEAD
-//                .antMatchers("/api/**").permitAll()
-//=======
-                .antMatchers(HttpMethod.OPTIONS,"/api/**").anonymous()
-                .antMatchers("/api/compte/isUsernameInDb/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/api/joueur/inscription").anonymous()
-                .antMatchers("/api/compte/authentification").authenticated()
-//>>>>>>> nico
-                .antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "JOUEUR")
+                .antMatchers("/api/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "JOUEUR")
                 .and()
                 .httpBasic()
                 .and()

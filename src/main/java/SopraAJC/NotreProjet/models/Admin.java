@@ -14,11 +14,11 @@ public class Admin extends Compte{
 		super(login, password);
 	}
 
-	public Admin(Long id,String login, String password) {
+	public Admin(Integer id,String login, String password) {
 		super(id,login, password);
 	}
 		
-	public Admin (Long id, String username, String password, String prenom, String nom)
+	public Admin (Integer id, String username, String password, String prenom, String nom)
 	{
 		super(id, username, password, prenom, nom, Role.ROLE_ADMIN);
 	}

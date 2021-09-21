@@ -60,7 +60,7 @@ public class SessionRessourceRestController {
 	@Autowired
 	private GestionRessourceService gestionRessourceService;
 	@GetMapping("/{idp}&{idc}")
-	public List<SessionRessource> getBySession(@PathVariable Long idp, @PathVariable Long idc) {		
+	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc );
 		if(opt.isPresent()) {
 			return sessionResRepo.findBySession(opt.get());
@@ -75,14 +75,14 @@ public class SessionRessourceRestController {
 	
 	@GetMapping("/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionWithSessionRessource.class)
-	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Long idPartie, Long idCompte){
+	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Integer idPartie, Integer idCompte){
 		return gestionRessourceService.getSessionRessourceBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 	
 	//Piocher des cartes en début de tour
 	@GetMapping("/piocher/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public String piocher(@PathVariable Long idp, @PathVariable Long idc) {
+	public String piocher(@PathVariable Integer idp, @PathVariable Integer idc) {
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		System.out.println(opt.get());
 		if(opt.isPresent()) {
@@ -96,7 +96,7 @@ public class SessionRessourceRestController {
 	//Produire les ressources grâce aux batiments de production
 	@GetMapping("/productionRessource/{idp}&{idc}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<String> productionRessource(@PathVariable Long idp, @PathVariable Long idc){
+	public List<String> productionRessource(@PathVariable Integer idp, @PathVariable Integer idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -111,7 +111,7 @@ public class SessionRessourceRestController {
 	@GetMapping("/listeBatimentTransformation")
 	@ResponseStatus(HttpStatus.OK)
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Long idp, @PathVariable Long idc){
+	public List<SessionBatiment> listeBatimentTransformation(@PathVariable Integer idp, @PathVariable Integer idc){
 		Optional <Session> opt = sessionService.findSession(idp, idc);
 		
 		if(opt.isPresent()) {
@@ -144,7 +144,7 @@ public class SessionRessourceRestController {
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
 
-	public void transformationRessource(@PathVariable Long idp, @PathVariable Long idc, BindingResult br ,@Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
+	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, BindingResult br ,@Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
 		//transformationRessource Valide
 		if(br.hasErrors()) {
 			throw new SessionRessourceException();

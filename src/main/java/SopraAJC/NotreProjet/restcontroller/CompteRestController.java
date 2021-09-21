@@ -39,7 +39,7 @@ public class CompteRestController {
 
     @GetMapping("/{id}")
     @JsonView(JsonViews.Common.class)
-    public Compte compteById(@PathVariable("id") Long id){
+    public Compte compteById(@PathVariable("id") Integer id){
         return compteService.compteExistsInDB(id);
     }
 

@@ -58,7 +58,7 @@ public class SessionBatimentRestController {
 	
 	@GetMapping("/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> getAllBySession(@PathVariable Long idPartie, @PathVariable Long idCompte) {
+	public List<SessionBatiment> getAllBySession(@PathVariable Integer idPartie, @PathVariable Integer idCompte) {
 		return sessionBatRepo.findBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());	
 	}
 	
@@ -86,7 +86,7 @@ public class SessionBatimentRestController {
 //	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 //		return construction.Constructible(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 //=======
-	public List<Batiment> BatimentConstructible(@PathVariable Long idPartie, @PathVariable Long idCompte){
+	public List<Batiment> BatimentConstructible(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Constructible(session);
 //>>>>>>> nico
@@ -98,7 +98,7 @@ public class SessionBatimentRestController {
 //	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 //		return construction.Ameliorable(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 //=======
-	public List<SessionBatiment> batimentAmeliorable(@PathVariable Long idPartie, @PathVariable Long idCompte){
+	public List<SessionBatiment> batimentAmeliorable(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		Session session =sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get();
 		return construction.Ameliorable(session);
 //>>>>>>> nico
@@ -106,13 +106,13 @@ public class SessionBatimentRestController {
 	
 	@GetMapping("/transformation/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public List<SessionBatiment> batimentTransformation(@PathVariable Long idPartie, @PathVariable Long idCompte){
+	public List<SessionBatiment> batimentTransformation(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		return gestionRessource.listeBatimentTransformation(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 
 	@PostMapping("/construction/{idPartie}/{idCompte}/{idBat}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
-	public SessionBatiment construction(@PathVariable Long idPartie,@PathVariable Long idCompte, @PathVariable Integer idBat) {
+	public SessionBatiment construction(@PathVariable Integer idPartie,@PathVariable Integer idCompte, @PathVariable Integer idBat) {
 		
 		if(construction.verificationConstructible(batimentRepo.findById(idBat).get(), sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get())) {
 			SessionBatiment sb= construction.constructBat(batimentRepo.findById(idBat).get(), sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());

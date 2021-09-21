@@ -24,8 +24,8 @@ public class PartieService {
         return partieRepository.save(new Partie());
     }
 
-    public Partie partieExistsInDB(Long id){
-        Optional<Partie> opt = partieRepository.findById(id);
+    public Partie partieExistsInDB(Integer long1){
+        Optional<Partie> opt = partieRepository.findById(long1);
         if (opt.isPresent()){
             return opt.get();
         }
