@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import SopraAJC.NotreProjet.models.Compte;
 
-public interface CompteRepository extends JpaRepository <Compte, Long> {
+public interface CompteRepository extends JpaRepository <Compte, Integer> {
 
 //	Optional<Compte> findBySurnom(String surnom); l'attribut surnom n'existe plus
 

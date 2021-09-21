@@ -37,7 +37,7 @@ public class PartieRestController {
 
     @GetMapping("/{id}")
     @JsonView(JsonViews.PartieWithSession.class)
-    public Partie partieById(@PathVariable("id") Long id){
+    public Partie partieById(@PathVariable("id") Integer id){
         partieService.partieExistsInDB(id);
         return partieRepository.findById(id).get();
     }

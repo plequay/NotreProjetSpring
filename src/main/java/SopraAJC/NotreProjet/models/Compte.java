@@ -14,7 +14,7 @@ public abstract class Compte {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(JsonViews.Common.class)
-	protected Long id;
+	protected Integer id;
 	@Column(name = "username", length = 150, unique = true, nullable = false)
 	@JsonView(JsonViews.Common.class)
 	protected String username;
@@ -37,7 +37,7 @@ public abstract class Compte {
 		super();
 	}
 	
-	public Compte(Long id, String username, String password, String prenom, String nom, Role role){
+	public Compte(Integer id, String username, String password, String prenom, String nom, Role role){
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -59,17 +59,17 @@ public abstract class Compte {
 		this.password = password;
 	}
 	
-	public Compte(Long id, String username, String password) {
+	public Compte(Integer id, String username, String password) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

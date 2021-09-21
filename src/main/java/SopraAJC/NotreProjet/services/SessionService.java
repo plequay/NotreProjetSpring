@@ -65,7 +65,7 @@ public class SessionService {
     /*
 	    * retrouver une session par sa partie et son compte
 	    * */
-    public Optional<Session> findSession(Long idp, Long idc){
+    public Optional<Session> findSession(Integer idp, Integer idc){
 		Compte compte = compteService.compteExistsInDB(idc);
 		Partie partie = partieService.partieExistsInDB(idp);
 		return sessionRepository.findByPartieAndCompte(partie, compte);
