@@ -34,7 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+//<<<<<<< HEAD
+//                .antMatchers("/api/**").permitAll()
+//=======
+                .antMatchers(HttpMethod.OPTIONS,"/api/**").anonymous()
+                .antMatchers("/api/compte/isUsernameInDb/**").anonymous()
+                .antMatchers(HttpMethod.POST, "/api/joueur/inscription").anonymous()
+                .antMatchers("/api/compte/authentification").authenticated()
+//>>>>>>> nico
                 .antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
