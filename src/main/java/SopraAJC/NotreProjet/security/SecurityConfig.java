@@ -23,12 +23,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+
         http.antMatcher("/api/**").csrf().disable().authorizeRequests().anyRequest().permitAll();
+
+//        http.antMatcher("/api/**")
 //                .csrf().ignoringAntMatchers("/api/**")
 //                .and()
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .and()
 //                .authorizeRequests()
+//                .antMatchers("/api/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
 //                .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
 //                .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
@@ -41,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated()
 //                .and()
 //                .formLogin();
+
     }
 
     @Override
