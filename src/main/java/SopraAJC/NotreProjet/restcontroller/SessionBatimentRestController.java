@@ -124,9 +124,7 @@ public class SessionBatimentRestController {
 		for (SessionBatiment sb : session.getSessionBatiment()) {
 			
 			def+=sb.getPointsDeVie();
-			if(!sb.isUsed()) {
-				att+=sb.getPointsDAttaque();
-			}
+			att+=sb.getPointsDAttaque();
 		}
 		session.setAtt(att);
 		session.setDef(def);
