@@ -18,7 +18,7 @@ public class SessionRessourceKey implements Serializable{
 	
 	@ManyToOne
     @JoinColumn(name = "ressource_id", foreignKey = @ForeignKey(name = "session_ressource_id_pk"))
-	@JsonView(JsonViews.SessionWithAll.class)
+	@JsonView({JsonViews.SessionWithAll.class,JsonViews.SessionWithSessionRessource.class})
     private Ressource ressource;
 
 	public SessionRessourceKey() {

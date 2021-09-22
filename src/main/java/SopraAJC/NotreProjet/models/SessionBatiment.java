@@ -44,7 +44,8 @@ public class SessionBatiment {
 		this.level = level;
 	}
 
-    private boolean used = false;
+	@JsonView(JsonViews.Common.class)
+	private boolean used = false;
     
     public SessionBatiment() {
     }

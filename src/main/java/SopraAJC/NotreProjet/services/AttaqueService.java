@@ -73,8 +73,8 @@ public class AttaqueService {
 		}
 	}
 	
-	public void attackAllBatimentWithOneBatiment(Session attack, Batiment attackBatiment, Session target) {
-		Optional<SessionBatiment> opt = sbRepo.findBySessionAndBatiment(attack, attackBatiment);
+	public void attackAllBatimentWithOneBatiment(Session attack, Integer idBatAtt, Session target) {
+		Optional<SessionBatiment> opt = sbRepo.findById(idBatAtt);
 		if(opt.isPresent()) {
 			SessionBatiment attackBat = opt.get();
 			if(attackBat.isUsed()) {
@@ -99,7 +99,7 @@ public class AttaqueService {
 		throw new AttaqueException();
 	}
 	
-	public void attackOneBatimentWithAllBatiment(Session attack, Session target, Batiment targetBatiment) {
+	public void attackOneBatimentWithAllBatiment(Session attack, Session target, Integer idBatTar) {
 		List<SessionBatiment> attackBatiment = sbRepo.findBySessionAndBatimentAttaque(attack);
 		double attaque = 0;
 		for(SessionBatiment sb : attackBatiment) {
@@ -115,7 +115,7 @@ public class AttaqueService {
 			throw new AttaqueException();
 		}
 		
-		Optional<SessionBatiment> opt = sbRepo.findBySessionAndBatiment(target, targetBatiment);
+		Optional<SessionBatiment> opt = sbRepo.findById(idBatTar);
 		if(opt.isPresent()) {
 			SessionBatiment targetBat = opt.get();
 			targetBat.setPointsDeVie(targetBat.getPointsDeVie()-attaque);
@@ -130,8 +130,8 @@ public class AttaqueService {
 		throw new TargetException();
 	}
 	
-	public void attackOneBatimentWithOneBatiment(Session attack, Batiment attackBatiment, Session target, Batiment targetBatiment) {
-		Optional<SessionBatiment> optAttack = sbRepo.findBySessionAndBatiment(attack, attackBatiment);
+	public void attackOneBatimentWithOneBatiment(Session attack, Integer idBatAtt, Session target, Integer idBatTar) {
+		Optional<SessionBatiment> optAttack = sbRepo.findById(idBatAtt);
 		if(!optAttack.isPresent()) {
 			throw new AttaqueException();
 		}
@@ -142,7 +142,7 @@ public class AttaqueService {
 		attackBat.setUsed(true);
 		sbRepo.save(attackBat);
 		
-		Optional<SessionBatiment> optTarget = sbRepo.findBySessionAndBatiment(target, targetBatiment);
+		Optional<SessionBatiment> optTarget = sbRepo.findById(idBatTar);
 		if(!optTarget.isPresent()) {
 			throw new TargetException();
 		}

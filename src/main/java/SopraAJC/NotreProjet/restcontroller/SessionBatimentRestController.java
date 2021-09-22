@@ -2,7 +2,6 @@ package SopraAJC.NotreProjet.restcontroller;
 
 import java.util.List;
 
-import SopraAJC.NotreProjet.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.exceptions.SessionBatimentException;
+import SopraAJC.NotreProjet.models.Attaque;
+import SopraAJC.NotreProjet.models.Batiment;
+import SopraAJC.NotreProjet.models.JsonViews;
+import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.repositories.BatimentRepository;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
+import SopraAJC.NotreProjet.services.AttaqueService;
 import SopraAJC.NotreProjet.services.ConstructionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
 
@@ -49,6 +54,9 @@ public class SessionBatimentRestController {
 	
 	@Autowired 
 	private GestionRessourceService gestionRessource;
+	
+	@Autowired
+	private AttaqueService attaqueService;
 	
 	@GetMapping("")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
@@ -109,6 +117,12 @@ public class SessionBatimentRestController {
 	public List<SessionBatiment> batimentTransformation(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		return gestionRessource.listeBatimentTransformation(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
+	
+	@GetMapping("attaque/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<SessionBatiment> getBatimentsAttaque(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+		return attaqueService.getBatimentAttaqueBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
+	}
 
 	@PostMapping("/construction/{idPartie}/{idCompte}/{idBat}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
@@ -132,5 +146,38 @@ public class SessionBatimentRestController {
 		throw new SessionBatimentException();
 		
 	}
+	
+	@PutMapping("/attaque/{idPartie}/{idAttack}/all/{idTarget}/all")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public void attaqueAllWithAll(@PathVariable Integer idPartie, @PathVariable Integer idAttack, @PathVariable Integer idTarget){
+		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
+		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
+		attaqueService.attackAllBatimentWithAllBatiment(attaquant, cible);
+	}
+	
+	@PutMapping("/attaque/{idPartie}/{idAttack}/{idBatAtt}/{idTarget}/all")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public void attaqueAllWithOne(@PathVariable Integer idPartie, @PathVariable Integer idAttack, @PathVariable Integer idBatAtt, @PathVariable Integer idTarget){
+		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
+		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
+		attaqueService.attackAllBatimentWithOneBatiment(attaquant,idBatAtt,cible);
+	}
+	
+	@PutMapping("/attaque/{idPartie}/{idAttack}/all/{idTarget}/{idBatTar}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public void attaqueOneWithAll(@PathVariable Integer idPartie, @PathVariable Integer idAttack, @PathVariable Integer idTarget, @PathVariable Integer idBatTar){
+		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
+		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
+		attaqueService.attackOneBatimentWithAllBatiment(attaquant, cible, idBatTar);
+	}
+	
+	@PutMapping("/attaque/{idPartie}/{idAttack}/{idBatAtt}/{idTarget}/{idBatTar}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public void attaqueOneWithOne(@PathVariable Integer idPartie, @PathVariable Integer idAttack, @PathVariable Integer idBatAtt, @PathVariable Integer idTarget, @PathVariable Integer idBatTar){
+		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
+		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
+		attaqueService.attackOneBatimentWithOneBatiment(attaquant,idBatAtt,cible,idBatTar);
+	}
+	
 	
 }
