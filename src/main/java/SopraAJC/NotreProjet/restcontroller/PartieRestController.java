@@ -38,11 +38,6 @@ public class PartieRestController {
     public List<Partie> allPartie(){
         return partieRepository.findAll();
     }
-//    @GetMapping("/{id}")
-//    @JsonView(JsonViews.PartieWithSession.class)
-//    public List<Partie> partieByCompte(@PathVariable Integer id){
-//        return partieRepository.findByCompte(compteRepo.findById(id).get());
-//    }
 
     @GetMapping("/{id}")
     @JsonView(JsonViews.PartieWithSession.class)
