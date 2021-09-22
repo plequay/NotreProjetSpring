@@ -13,9 +13,9 @@ import java.util.Objects;
 public class SessionRessource {
 
 	@EmbeddedId
-	@JsonView(JsonViews.SessionWithAll.class)
+	@JsonView({JsonViews.SessionWithAll.class,JsonViews.SessionWithSessionRessource.class})
 	private SessionRessourceKey id;
-	@JsonView(JsonViews.SessionWithAll.class)	    
+	@JsonView({JsonViews.SessionWithAll.class, JsonViews.SessionWithSessionRessource.class})	    
     private int quantite;
 
     public SessionRessource() {

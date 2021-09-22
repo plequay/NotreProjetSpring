@@ -48,8 +48,8 @@ public class AttaqueService {
 		for(SessionBatiment sb : attackBatiment) {
 			if(!sb.isUsed()) {
 				attaque+=sb.getPointsDAttaque();
+				sb.setUsed(true);
 			}
-			sb.setUsed(true);
 			sbRepo.save(sb);
 		}
 		if(attaque == 0) {
@@ -61,7 +61,7 @@ public class AttaqueService {
 		List<SessionBatiment> targetBatiment = sbRepo.findBySession(target);
 		double degats = attaque/targetBatiment.size();
 		for(SessionBatiment sb : targetBatiment) {
-			sb.setPointsDeVie(sb.getPointsDeVie()-degats);
+			sb.setPointsDeVie(Math.round(sb.getPointsDeVie()-degats));
 			if(sb.getPointsDeVie()<=0) {
 				sbRepo.delete(sb);
 			}
@@ -73,20 +73,22 @@ public class AttaqueService {
 		}
 	}
 	
-	public void attackAllBatimentWithOneBatiment(Session attack, Batiment attackBatiment, Session target) {
-		Optional<SessionBatiment> opt = sbRepo.findBySessionAndBatiment(attack, attackBatiment);
+	public void attackAllBatimentWithOneBatiment(Session attack, Integer idBatAtt, Session target) {
+		Optional<SessionBatiment> opt = sbRepo.findById(idBatAtt);
 		if(opt.isPresent()) {
 			SessionBatiment attackBat = opt.get();
 			if(attackBat.isUsed()) {
 				throw new AttaqueException();
 			}
-			attackBat.setUsed(true);
+			else {
+				attackBat.setUsed(true);
+			}
 			sbRepo.save(attackBat);
 			
 			List<SessionBatiment> targetBatiment = sbRepo.findBySession(target);
 			double degats = attackBat.getPointsDAttaque()/targetBatiment.size();
 			for(SessionBatiment sb : targetBatiment) {
-				sb.setPointsDeVie(sb.getPointsDeVie()-degats);
+				sb.setPointsDeVie(Math.round(sb.getPointsDeVie()-degats));
 				if(sb.getPointsDeVie()<=0) {
 					sbRepo.delete(sb);
 				}
@@ -96,17 +98,19 @@ public class AttaqueService {
 				}
 			}
 		}
-		throw new AttaqueException();
+		else{
+			throw new AttaqueException();
+		}
 	}
 	
-	public void attackOneBatimentWithAllBatiment(Session attack, Session target, Batiment targetBatiment) {
+	public void attackOneBatimentWithAllBatiment(Session attack, Session target, Integer idBatTar) {
 		List<SessionBatiment> attackBatiment = sbRepo.findBySessionAndBatimentAttaque(attack);
 		double attaque = 0;
 		for(SessionBatiment sb : attackBatiment) {
 			if(!sb.isUsed()) {
 				attaque+=sb.getPointsDAttaque();
+				sb.setUsed(true);
 			}
-			sb.setUsed(true);
 			sbRepo.save(sb);
 		}
 		if(attaque == 0) {
@@ -115,7 +119,7 @@ public class AttaqueService {
 			throw new AttaqueException();
 		}
 		
-		Optional<SessionBatiment> opt = sbRepo.findBySessionAndBatiment(target, targetBatiment);
+		Optional<SessionBatiment> opt = sbRepo.findById(idBatTar);
 		if(opt.isPresent()) {
 			SessionBatiment targetBat = opt.get();
 			targetBat.setPointsDeVie(targetBat.getPointsDeVie()-attaque);
@@ -127,11 +131,13 @@ public class AttaqueService {
 				sbRepo.save(targetBat);
 			}
 		}
-		throw new TargetException();
+		else {
+			throw new TargetException();
+		}
 	}
 	
-	public void attackOneBatimentWithOneBatiment(Session attack, Batiment attackBatiment, Session target, Batiment targetBatiment) {
-		Optional<SessionBatiment> optAttack = sbRepo.findBySessionAndBatiment(attack, attackBatiment);
+	public void attackOneBatimentWithOneBatiment(Session attack, Integer idBatAtt, Session target, Integer idBatTar) {
+		Optional<SessionBatiment> optAttack = sbRepo.findById(idBatAtt);
 		if(!optAttack.isPresent()) {
 			throw new AttaqueException();
 		}
@@ -142,7 +148,7 @@ public class AttaqueService {
 		attackBat.setUsed(true);
 		sbRepo.save(attackBat);
 		
-		Optional<SessionBatiment> optTarget = sbRepo.findBySessionAndBatiment(target, targetBatiment);
+		Optional<SessionBatiment> optTarget = sbRepo.findById(idBatTar);
 		if(!optTarget.isPresent()) {
 			throw new TargetException();
 		}

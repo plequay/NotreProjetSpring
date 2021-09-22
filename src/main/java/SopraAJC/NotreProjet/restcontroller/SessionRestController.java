@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.dto.SessionDto;
 import SopraAJC.NotreProjet.exceptions.SessionException;
+import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
@@ -57,6 +60,16 @@ public class SessionRestController {
         return sessionRepository.findAll();
 
     }
+    @GetMapping("/{idP}")
+    @JsonView(JsonViews.SessionWithAll.class)
+    public List<Session> getSessionByPartie(@PathVariable Integer idP){
+        return sessionRepository.findByPartie(pRepo.findById(idP).get());
+    }
+    @GetMapping("/compte/{idCompte}")
+    @JsonView(JsonViews.SessionWithAll.class)
+    public List<Session> getSessionByCompte(@PathVariable Integer idCompte){
+        return sessionRepository.findByCompte(cRepo.findById(idCompte).get());
+    }
 
     @PostMapping("")
     @JsonView(JsonViews.SessionWithPartieAndCompte.class)
@@ -74,6 +87,9 @@ public class SessionRestController {
     	Session session = sessionRepository.findByPartieAndCompte(pRepo.findById(idPartie).get() , cRepo.findById(idCompte).get()).get();
     	if (session.isTourEnCours()) {
     		session.setTourEnCours(false);
+    		for(SessionBatiment sb:session.getSessionBatiment()){
+    			sb.setUsed(false);
+    		}
     	}else {
     		session.setTourEnCours(true);
     	}
@@ -98,6 +114,12 @@ public class SessionRestController {
         });
 
         return sessions;
+    }
+    
+    @DeleteMapping("/{idP}/[idC}")
+    @JsonView(JsonViews.SessionWithAll.class)
+    public void deleteSession(@PathVariable Integer idP, @PathVariable Integer idC) {
+    	sessionRepository.delete(sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get());
     }
 
     

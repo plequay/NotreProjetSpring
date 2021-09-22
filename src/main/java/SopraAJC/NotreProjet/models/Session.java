@@ -31,8 +31,10 @@ public class Session {
     @JsonView(JsonViews.Common.class)
     private boolean aCommence;
 
+    @JsonView(JsonViews.Common.class)
     private double def;
 
+    @JsonView(JsonViews.Common.class)
     private double att;
 
     @OneToMany (mappedBy = "session")

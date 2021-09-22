@@ -3,6 +3,7 @@ package SopraAJC.NotreProjet.restcontroller;
 import SopraAJC.NotreProjet.dto.PartieDto;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Partie;
+import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.services.CompteService;
 import SopraAJC.NotreProjet.services.ConsoleService;
@@ -28,12 +29,20 @@ public class PartieRestController {
 
     @Autowired
     PartieRepository partieRepository;
+    
+    @Autowired
+    CompteRepository compteRepo;
 
     @GetMapping("")
     @JsonView(JsonViews.PartieWithSession.class)
     public List<Partie> allPartie(){
         return partieRepository.findAll();
     }
+//    @GetMapping("/{id}")
+//    @JsonView(JsonViews.PartieWithSession.class)
+//    public List<Partie> partieByCompte(@PathVariable Integer id){
+//        return partieRepository.findByCompte(compteRepo.findById(id).get());
+//    }
 
     @GetMapping("/{id}")
     @JsonView(JsonViews.PartieWithSession.class)
