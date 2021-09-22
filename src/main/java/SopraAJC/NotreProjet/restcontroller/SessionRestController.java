@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -113,6 +114,12 @@ public class SessionRestController {
         });
 
         return sessions;
+    }
+    
+    @DeleteMapping("/{idP}/[idC}")
+    @JsonView(JsonViews.SessionWithAll.class)
+    public void deleteSession(@PathVariable Integer idP, @PathVariable Integer idC) {
+    	 sessionRepository.delete(sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get());
     }
 
     
