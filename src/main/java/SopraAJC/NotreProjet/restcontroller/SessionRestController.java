@@ -64,6 +64,11 @@ public class SessionRestController {
     public List<Session> getSessionByPartie(@PathVariable Integer idP){
         return sessionRepository.findByPartie(pRepo.findById(idP).get());
     }
+    @GetMapping("/compte/{idCompte}")
+    @JsonView(JsonViews.SessionWithAll.class)
+    public List<Session> getSessionByCompte(@PathVariable Integer idCompte){
+        return sessionRepository.findByCompte(cRepo.findById(idCompte).get());
+    }
 
     @PostMapping("")
     @JsonView(JsonViews.SessionWithPartieAndCompte.class)
