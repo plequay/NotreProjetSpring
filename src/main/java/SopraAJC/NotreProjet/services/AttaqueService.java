@@ -48,8 +48,8 @@ public class AttaqueService {
 		for(SessionBatiment sb : attackBatiment) {
 			if(!sb.isUsed()) {
 				attaque+=sb.getPointsDAttaque();
+				sb.setUsed(true);
 			}
-			sb.setUsed(true);
 			sbRepo.save(sb);
 		}
 		if(attaque == 0) {
@@ -61,7 +61,7 @@ public class AttaqueService {
 		List<SessionBatiment> targetBatiment = sbRepo.findBySession(target);
 		double degats = attaque/targetBatiment.size();
 		for(SessionBatiment sb : targetBatiment) {
-			sb.setPointsDeVie(sb.getPointsDeVie()-degats);
+			sb.setPointsDeVie(Math.round(sb.getPointsDeVie()-degats));
 			if(sb.getPointsDeVie()<=0) {
 				sbRepo.delete(sb);
 			}
@@ -80,13 +80,15 @@ public class AttaqueService {
 			if(attackBat.isUsed()) {
 				throw new AttaqueException();
 			}
-			attackBat.setUsed(true);
+			else {
+				attackBat.setUsed(true);
+			}
 			sbRepo.save(attackBat);
 			
 			List<SessionBatiment> targetBatiment = sbRepo.findBySession(target);
 			double degats = attackBat.getPointsDAttaque()/targetBatiment.size();
 			for(SessionBatiment sb : targetBatiment) {
-				sb.setPointsDeVie(sb.getPointsDeVie()-degats);
+				sb.setPointsDeVie(Math.round(sb.getPointsDeVie()-degats));
 				if(sb.getPointsDeVie()<=0) {
 					sbRepo.delete(sb);
 				}
@@ -96,7 +98,9 @@ public class AttaqueService {
 				}
 			}
 		}
-		throw new AttaqueException();
+		else{
+			throw new AttaqueException();
+		}
 	}
 	
 	public void attackOneBatimentWithAllBatiment(Session attack, Session target, Integer idBatTar) {
@@ -105,8 +109,8 @@ public class AttaqueService {
 		for(SessionBatiment sb : attackBatiment) {
 			if(!sb.isUsed()) {
 				attaque+=sb.getPointsDAttaque();
+				sb.setUsed(true);
 			}
-			sb.setUsed(true);
 			sbRepo.save(sb);
 		}
 		if(attaque == 0) {
@@ -127,7 +131,9 @@ public class AttaqueService {
 				sbRepo.save(targetBat);
 			}
 		}
-		throw new TargetException();
+		else {
+			throw new TargetException();
+		}
 	}
 	
 	public void attackOneBatimentWithOneBatiment(Session attack, Integer idBatAtt, Session target, Integer idBatTar) {
