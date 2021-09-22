@@ -19,8 +19,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import SopraAJC.NotreProjet.dto.SessionDto;
 import SopraAJC.NotreProjet.exceptions.SessionException;
+import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
@@ -79,6 +81,9 @@ public class SessionRestController {
     	Session session = sessionRepository.findByPartieAndCompte(pRepo.findById(idPartie).get() , cRepo.findById(idCompte).get()).get();
     	if (session.isTourEnCours()) {
     		session.setTourEnCours(false);
+    		for(SessionBatiment sb:session.getSessionBatiment()){
+    			sb.setUsed(false);
+    		}
     	}else {
     		session.setTourEnCours(true);
     	}
