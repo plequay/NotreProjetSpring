@@ -119,7 +119,7 @@ public class SessionRestController {
     @DeleteMapping("/{idP}/[idC}")
     @JsonView(JsonViews.SessionWithAll.class)
     public void deleteSession(@PathVariable Integer idP, @PathVariable Integer idC) {
-    	 sessionRepository.delete(sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get());
+    	sessionRepository.delete(sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get());
     }
 
     
