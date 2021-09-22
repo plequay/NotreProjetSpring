@@ -29,6 +29,7 @@ import SopraAJC.NotreProjet.exceptions.BatimentException;
 import SopraAJC.NotreProjet.models.Attaque;
 import SopraAJC.NotreProjet.models.CoutBatiment;
 import SopraAJC.NotreProjet.models.CoutBatimentKey;
+import SopraAJC.NotreProjet.models.Defense;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.repositories.AttaqueRepository;
@@ -68,35 +69,45 @@ public class AttaqueRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque createBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Attaque createBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
 		aRepo.save(attaque);
+		
+		List<CoutBatiment> list = attaque.getCoutBatiment();
+		if(!(list == null)) {
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,cbd.getId().getRessource()),cbd.getCout());
 			cbRepo.save(cb);
 		});
+		}
 		return attaque;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Attaque replaceBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Attaque replaceBatimentAttaque(@Valid @RequestBody Attaque attaque, BindingResult br, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
 		Optional<Attaque> opt = aRepo.findById(id);
 		if(opt.isPresent()) {
 			attaque.setId(id);
+			if(!attaque.getCoutBatiment().isEmpty()) {
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
+			}
+			List<CoutBatiment> list = attaque.getCoutBatiment();
+			if(!(list == null)) { 
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(attaque,cbd.getId().getRessource()),cbd.getCout());
 				cbRepo.save(cb);
 			});
-			return aRepo.save(attaque);
+			} 
+			attaque.setCost(null);
+			return aRepo.save(attaque); 
 		}
 		throw new BatimentException();
 	}
@@ -128,7 +139,8 @@ public class AttaqueRestController {
 				cbRepo.delete(cb);
 			}
 			aRepo.delete(batAttADelete);
-		}
+		}else {
 		throw new BatimentException();
+		}
 	}
 }

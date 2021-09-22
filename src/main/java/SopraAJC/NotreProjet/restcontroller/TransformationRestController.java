@@ -31,9 +31,11 @@ import SopraAJC.NotreProjet.models.CoutBatimentKey;
 import SopraAJC.NotreProjet.models.CoutBatimentDto;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Transformation;
+import SopraAJC.NotreProjet.models.TransformationRessource;
 import SopraAJC.NotreProjet.repositories.CoutBatimentRepository;
 import SopraAJC.NotreProjet.repositories.RessourceRepository;
 import SopraAJC.NotreProjet.repositories.TransformationRepository;
+import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
 
 @RestController
 @RequestMapping("/api/transformation")
@@ -42,6 +44,9 @@ public class TransformationRestController {
 
 	@Autowired
 	private TransformationRepository tRepo;
+	
+	@Autowired
+	private TransformationRessourceRepository trRepo;
 	
 	@Autowired
 	private CoutBatimentRepository cbRepo;
@@ -56,7 +61,7 @@ public class TransformationRestController {
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(JsonViews.BatimentWithCout.class)
+	@JsonView(JsonViews.BatimentWithCoutAndListeTransformationRessource.class)
 	public Transformation findBatimentTransformationById(@PathVariable Integer id) {
 		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
@@ -68,34 +73,67 @@ public class TransformationRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Transformation createBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Transformation createBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
 		tRepo.save(transformation);
+		List<CoutBatiment> list = transformation.getCoutBatiment();
+		if(!(list == null)) {
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,cbd.getId().getRessource()),cbd.getCout());
 			cbRepo.save(cb);
 		});
+		}
+		List<TransformationRessource> listT = transformation.getTransformationRessouce();
+		if(!(listT == null)) {
+			listT.stream().forEach(e -> {
+				TransformationRessource tr = new TransformationRessource(transformation,e.getRessourceLost(),e.getRessourceWin());
+				trRepo.save(tr);
+		});
+		}
 		return transformation;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Transformation replaceBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Transformation replaceBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @PathVariable Integer id) {
+//		transformation.getTransformationRessouce().stream().forEach(e-> {
+//			System.out.println(e.getRessourceLost().getNom());
+//			System.out.println(e.getRessourceWin().getNom());
+//		});
+		
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
 		Optional<Transformation> opt = tRepo.findById(id);
 		if(opt.isPresent()) {
 			transformation.setId(id);
+			if(!transformation.getCoutBatiment().isEmpty()) {
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
+			}
+			List<CoutBatiment> list = transformation.getCoutBatiment();
+			if(!(list == null)) {
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(transformation,cbd.getId().getRessource()),cbd.getCout());
 				cbRepo.save(cb);
 			});
+			}
+//			if(!transformation.getTransformationRessouce().isEmpty()) {
+//				for(TransformationRessource tr : opt.get().getTransformationRessouce()) {
+//					trRepo.delete(tr);
+//			}
+			List<TransformationRessource> listT = transformation.getTransformationRessouce();
+			if(!(listT == null)) {
+				listT.stream().forEach(e -> {
+					TransformationRessource tr = new TransformationRessource(transformation,e.getRessourceLost(),e.getRessourceWin());
+					trRepo.save(tr);
+			});
+			}
+			
+			transformation.setCost(null);
 			return tRepo.save(transformation);
 		}
 		throw new BatimentException();
@@ -128,7 +166,8 @@ public class TransformationRestController {
 				cbRepo.delete(cb);
 			}
 			tRepo.delete(batTransADelete);
-		}
+		}else {
 		throw new BatimentException();
+		}
 	}
 }

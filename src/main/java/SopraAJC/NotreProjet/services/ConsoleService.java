@@ -69,7 +69,7 @@ public class ConsoleService implements CommandLineRunner {
         compteRepository.save(joueur3);
         compteRepository.save(joueur4);
 
-        Partie partie = new Partie();
+        Partie partie = new Partie("Un peu de description quand même, ça va être une super partie \n get ready!");
         partieRepository.save(partie);
 
         Session session1 = new Session(new SessionKey(partie, joueur1));
