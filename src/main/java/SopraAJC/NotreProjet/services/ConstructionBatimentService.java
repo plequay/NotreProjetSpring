@@ -2,16 +2,18 @@ package SopraAJC.NotreProjet.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import SopraAJC.NotreProjet.models.Attaque;
 import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.CoutBatiment;
-import SopraAJC.NotreProjet.models.Ressource;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
+import SopraAJC.NotreProjet.repositories.AttaqueRepository;
 import SopraAJC.NotreProjet.repositories.BatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
@@ -31,6 +33,9 @@ public class ConstructionBatimentService {
 
 	@Autowired
 	SessionBatimentRepository sessionBatRepo;
+	
+	@Autowired
+	AttaqueRepository attaqueRepo;
 
 	public boolean verificationConstructible(Batiment batiment, Session session) // Verification du nombre de ressources
 																					// du joueur pour acheter un
@@ -63,10 +68,18 @@ public class ConstructionBatimentService {
 	public SessionBatiment constructBat(Batiment batiment, Session session) // Construction d'un batiment (ajout a la
 																	// liste/actuAtt/ActuDef/ActuRessources)
 	{
-		SessionBatiment sb = new SessionBatiment(session, batiment,
-				batRepo.findByNom(batiment.getNom()).get().getPointsDefense());
-		List<SessionRessource> listSr = sessionRessRepo.findBySession(session);
-
+		SessionBatiment sb = new SessionBatiment();
+		List<SessionRessource> listSr = new ArrayList();
+			if(batiment instanceof Attaque) {
+				sb = new SessionBatiment(session, batiment, attaqueRepo.findByNom(batiment.getNom()).get().getPointsDefense(), attaqueRepo.findByNom(batiment.getNom()).get().getPointsDAttaque());
+				listSr = sessionRessRepo.findBySession(session);
+			}
+			else {
+				sb = new SessionBatiment(session, batiment,
+						batRepo.findByNom(batiment.getNom()).get().getPointsDefense());
+				listSr = sessionRessRepo.findBySession(session);
+			}
+		
 		for (SessionRessource sr : listSr) 
 		{
 			for (CoutBatiment cb : batiment.getCoutBatiment())
