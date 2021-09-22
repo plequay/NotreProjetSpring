@@ -118,6 +118,22 @@ public class SessionBatimentRestController {
 		return gestionRessource.listeBatimentTransformation(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 	
+	private Session actuDefAttPlayer(Session session) {
+		double att = 0;
+		double def =0;
+		for (SessionBatiment sb : session.getSessionBatiment()) {
+			
+			def+=sb.getPointsDeVie();
+			if(!sb.isUsed()) {
+				att+=sb.getPointsDAttaque();
+			}
+		}
+		session.setAtt(att);
+		session.setDef(def);
+		return sessionRepo.save(session);
+	}
+	
+	
 	@GetMapping("attaque/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public List<SessionBatiment> getBatimentsAttaque(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
@@ -130,6 +146,7 @@ public class SessionBatimentRestController {
 		
 		if(construction.verificationConstructible(batimentRepo.findById(idBat).get(), sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get())) {
 			SessionBatiment sb= construction.constructBat(batimentRepo.findById(idBat).get(), sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
+			actuDefAttPlayer(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 			return sb;
 		} else {
 			return null;
@@ -141,6 +158,7 @@ public class SessionBatimentRestController {
 	public SessionBatiment amelioration(@PathVariable Integer id) {
 		if(construction.verificationAmeliorable(sessionBatRepo.findById(id).get())) {
 			SessionBatiment sb= construction.ameliorationBat(sessionBatRepo.findById(id).get());
+			actuDefAttPlayer(sb.getSession());
 			return sb;
 		} 
 		throw new SessionBatimentException();
@@ -153,6 +171,7 @@ public class SessionBatimentRestController {
 		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
 		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
 		attaqueService.attackAllBatimentWithAllBatiment(attaquant, cible);
+		actuDefAttPlayer(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get());
 	}
 	
 	@PutMapping("/attaque/{idPartie}/{idAttack}/{idBatAtt}/{idTarget}/all")
@@ -161,6 +180,7 @@ public class SessionBatimentRestController {
 		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
 		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
 		attaqueService.attackAllBatimentWithOneBatiment(attaquant,idBatAtt,cible);
+		actuDefAttPlayer(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get());
 	}
 	
 	@PutMapping("/attaque/{idPartie}/{idAttack}/all/{idTarget}/{idBatTar}")
@@ -169,6 +189,7 @@ public class SessionBatimentRestController {
 		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
 		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
 		attaqueService.attackOneBatimentWithAllBatiment(attaquant, cible, idBatTar);
+		actuDefAttPlayer(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get());
 	}
 	
 	@PutMapping("/attaque/{idPartie}/{idAttack}/{idBatAtt}/{idTarget}/{idBatTar}")
@@ -177,6 +198,7 @@ public class SessionBatimentRestController {
 		Session attaquant = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idAttack).get()).get();
 		Session cible = sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get();
 		attaqueService.attackOneBatimentWithOneBatiment(attaquant,idBatAtt,cible,idBatTar);
+		actuDefAttPlayer(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idTarget).get()).get());
 	}
 	
 	
