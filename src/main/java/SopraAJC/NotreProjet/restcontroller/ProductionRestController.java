@@ -56,7 +56,7 @@ public class ProductionRestController {
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(JsonViews.BatimentWithCout.class)
+	@JsonView(JsonViews.BatimentWithCoutAndRessourceProduite.class)
 	public Production findBatimentProductionById(@PathVariable Integer id) {
 		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
@@ -68,34 +68,44 @@ public class ProductionRestController {
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Production createBatimentProduction(@Valid @RequestBody Production production, BindingResult br, @RequestBody List<CoutBatimentDto> list) {
+	public Production createBatimentProduction(@Valid @RequestBody Production production, BindingResult br) {
 		if (br.hasErrors()) {
 			throw new BatimentException();
 		}
 		pRepo.save(production);
+		
+		List<CoutBatiment> list = production.getCoutBatiment();
+		if(!(list == null)) {
 		list.stream().forEach(cbd -> {
-			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+			CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,cbd.getId().getRessource()),cbd.getCout());
 			cbRepo.save(cb);
 		});
+		}
 		return production;
 	}
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
-	public Production replaceBatimentProduction(@Valid @RequestBody Production production, BindingResult br, @RequestBody List<CoutBatimentDto> list, @PathVariable Integer id) {
+	public Production replaceBatimentProduction(@Valid @RequestBody Production production, BindingResult br, @PathVariable Integer id) {
 		if(br.hasErrors()) {
 			throw new BatimentException();
 		}
 		Optional<Production> opt = pRepo.findById(id);
 		if(opt.isPresent()) {
 			production.setId(id);
+			if(!production.getCoutBatiment().isEmpty()) {
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
 				cbRepo.delete(cb);
 			}
+			}
+			List<CoutBatiment> list = production.getCoutBatiment();
+			if(!(list == null)) {
 			list.stream().forEach(cbd -> {
-				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,rRepo.findById(cbd.getIdRessource()).get()),cbd.getCout());
+				CoutBatiment cb = new CoutBatiment(new CoutBatimentKey(production,cbd.getId().getRessource()),cbd.getCout());
 				cbRepo.save(cb);
 			});
+			}
+			production.setCost(null);
 			return pRepo.save(production);
 		}
 		throw new BatimentException();
@@ -128,7 +138,8 @@ public class ProductionRestController {
 				cbRepo.delete(cb);
 			}
 			pRepo.delete(batProdADelete);
-		}
+		}else {
 		throw new BatimentException();
+		}
 	}
 }
