@@ -34,4 +34,18 @@ public class Transformation  extends Batiment{
 		super(nom,  def, level, ameliorable, cost);
 	}
 
+	/**
+	 * @return the transformationRessouce
+	 */
+	public List<TransformationRessource> getTransformationRessouce() {
+		return transformationRessouce;
+	}
+
+	/**
+	 * @param transformationRessouce the transformationRessouce to set
+	 */
+	public void setTransformationRessouce(List<TransformationRessource> transformationRessouce) {
+		this.transformationRessouce = transformationRessouce;
+	}
+
 }

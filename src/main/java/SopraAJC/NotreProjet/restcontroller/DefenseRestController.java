@@ -133,12 +133,13 @@ public class DefenseRestController {
 		}
 		Optional<Defense> opt = dRepo.findById(id);
 		if(opt.isPresent()) {
-			defense.setId(id);			
+			defense.setId(id);	
+			
+			if(!defense.getCoutBatiment().isEmpty()) {
 			for(CoutBatiment cb : opt.get().getCoutBatiment()) {
-				System.out.println("ici");
 				cbRepo.delete(cb);
 			}
-			System.out.println("là");
+			}
 			List<CoutBatiment> list = defense.getCoutBatiment();
 			if(!(list == null)) {
 			list.stream().forEach(cbd -> {

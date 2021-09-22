@@ -102,7 +102,7 @@ public class BatimentRestController {
 	@GetMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public Batiment findById(@PathVariable Integer id) {
-		Optional<Batiment> opt = bRepo.findById(id);
+		Optional<Batiment> opt = bRepo.findByIdWithCoutBatiment(id);
 		if(opt.isPresent()) {
 			return opt.get();
 		}
