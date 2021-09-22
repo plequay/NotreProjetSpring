@@ -144,12 +144,7 @@ public class SessionRessourceRestController {
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
 
-	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, BindingResult br ,@Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
-		//transformationRessource Valide
-		if(br.hasErrors()) {
-			throw new SessionRessourceException();
-		}
-//>>>>>>> nico
+	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, @Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
