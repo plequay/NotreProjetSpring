@@ -3,7 +3,10 @@ package SopraAJC.NotreProjet.restcontroller;
 import SopraAJC.NotreProjet.exceptions.CompteException;
 import SopraAJC.NotreProjet.models.Compte;
 import SopraAJC.NotreProjet.models.Joueur;
+import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
+import SopraAJC.NotreProjet.repositories.JoueurRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/joueur")
@@ -24,7 +28,16 @@ public class JoueurRestController {
     CompteRepository compteRepository;
 
     @Autowired
+    JoueurRepository joueurRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
+
+    @GetMapping("")
+    @JsonView(JsonViews.Common.class)
+    public List<Joueur> allJoueur(){
+        return joueurRepository.findAll();
+    }
 
     @PostMapping("/inscription")
     public void createJoueur(@Valid @RequestBody Joueur joueur, BindingResult bindingResult){
