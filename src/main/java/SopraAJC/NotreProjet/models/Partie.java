@@ -15,11 +15,24 @@ public class Partie {
     @JsonView(JsonViews.Common.class)
     private  Integer id;
 
+    @JsonView(JsonViews.Common.class)
+    private String description;
+
     @OneToMany(mappedBy = "id.partie")
     @JsonView(JsonViews.PartieWithSession.class)
     private List<Session> sessions = new ArrayList<>();
 
     public Partie() {
+    }
+
+    public Partie(String description) {
+        this.description = description;
+    }
+
+    public Partie(Integer id, String description, List<Session> sessions) {
+        this.id = id;
+        this.description = description;
+        this.sessions = sessions;
     }
 
     @Override
@@ -41,6 +54,14 @@ public class Partie {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Session> getSessions() {
