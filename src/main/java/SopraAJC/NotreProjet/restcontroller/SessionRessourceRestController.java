@@ -59,6 +59,7 @@ public class SessionRessourceRestController {
 	
 	@Autowired
 	private GestionRessourceService gestionRessourceService;
+	
 	@GetMapping("/{idp}&{idc}")
 	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc );
@@ -75,7 +76,7 @@ public class SessionRessourceRestController {
 	
 	@GetMapping("/{idPartie}/{idCompte}")
 	@JsonView(JsonViews.SessionWithSessionRessource.class)
-	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Integer idPartie, Integer idCompte){
+	public List<SessionRessource> getSessionRessourceBySession(@PathVariable Integer idPartie,@PathVariable Integer idCompte){
 		return gestionRessourceService.getSessionRessourceBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 	
@@ -144,12 +145,7 @@ public class SessionRessourceRestController {
 	@PostMapping("/transformationRessource/{idp}/{idc}/{idtr}/{quantite}")
 	@ResponseStatus(HttpStatus.CREATED)
 
-	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, BindingResult br ,@Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
-		//transformationRessource Valide
-		if(br.hasErrors()) {
-			throw new SessionRessourceException();
-		}
-//>>>>>>> nico
+	public void transformationRessource(@PathVariable Integer idp, @PathVariable Integer idc, @Valid @PathVariable Integer idtr, @PathVariable Integer quantite) {
 		
 		//Session Valide
 		Optional <Session> session = sessionService.findSession(idp, idc);
