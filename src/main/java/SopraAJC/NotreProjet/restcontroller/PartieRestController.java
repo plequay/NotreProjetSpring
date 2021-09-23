@@ -4,8 +4,14 @@ import SopraAJC.NotreProjet.dto.PartieDto;
 import SopraAJC.NotreProjet.exceptions.PartieException;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Partie;
+import SopraAJC.NotreProjet.models.Session;
+import SopraAJC.NotreProjet.models.SessionBatiment;
+import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
+import SopraAJC.NotreProjet.repositories.SessionRepository;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.CompteService;
 import SopraAJC.NotreProjet.services.ConsoleService;
 import SopraAJC.NotreProjet.services.PartieService;
@@ -36,6 +42,13 @@ public class PartieRestController {
     
     @Autowired
     CompteRepository compteRepo;
+    @Autowired
+    SessionBatimentRepository sessionBatRepo;
+    
+    @Autowired
+    SessionRessourceRepository sessionResRepo;
+    @Autowired
+    SessionRepository sessionRepo;
 
     @GetMapping("")
     @JsonView(JsonViews.Common.class)
@@ -98,6 +111,16 @@ public class PartieRestController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id){
+    	Partie partie = partieRepository.findById(id).get();
+    	for (Session session: partie.getSessions()) {
+    	for (SessionBatiment sb : session.getSessionBatiment()) {
+    		sessionBatRepo.delete(sb);
+    	}
+    	for (SessionRessource sr: session.getSessionRessource()) {
+    		sessionResRepo.delete(sr);
+    	}
+    	sessionRepo.delete(session);
+    	}
         partieService.delete(id);
     }
 

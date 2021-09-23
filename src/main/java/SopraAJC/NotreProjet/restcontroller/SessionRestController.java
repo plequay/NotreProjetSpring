@@ -24,9 +24,12 @@ import SopraAJC.NotreProjet.models.Batiment;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
+import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
+import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
+import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.SessionService;
 
 @RestController
@@ -39,6 +42,12 @@ public class SessionRestController {
 
     @Autowired
     SessionRepository sessionRepository;
+    
+    @Autowired
+    SessionBatimentRepository sessionBatRepo;
+    
+    @Autowired
+    SessionRessourceRepository sessionResRepo;
     
     @Autowired
     private PartieRepository pRepo;
@@ -116,10 +125,16 @@ public class SessionRestController {
         return sessions;
     }
     
-    @DeleteMapping("/{idP}/[idC}")
-    @JsonView(JsonViews.SessionWithAll.class)
+    @DeleteMapping("/del/{idP}/{idC}")
     public void deleteSession(@PathVariable Integer idP, @PathVariable Integer idC) {
-    	sessionRepository.delete(sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get());
+    	Session session=sessionRepository.findByPartieAndCompte(pRepo.findById(idP).get(), cRepo.findById(idC).get()).get();
+    	for (SessionBatiment sb : session.getSessionBatiment()) {
+    		sessionBatRepo.delete(sb);
+    	}
+    	for (SessionRessource sr: session.getSessionRessource()) {
+    		sessionResRepo.delete(sr);
+    	}
+    	sessionRepository.delete(session);
     }
 
     

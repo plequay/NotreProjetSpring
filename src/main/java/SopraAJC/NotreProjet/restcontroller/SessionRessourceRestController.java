@@ -24,6 +24,7 @@ import SopraAJC.NotreProjet.repositories.SessionRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.repositories.TransformationRepository;
 import SopraAJC.NotreProjet.repositories.TransformationRessourceRepository;
+import SopraAJC.NotreProjet.services.CreationPartieService;
 import SopraAJC.NotreProjet.services.GestionBatimentService;
 import SopraAJC.NotreProjet.services.GestionRessourceService;
 import SopraAJC.NotreProjet.services.SessionService;
@@ -60,6 +61,9 @@ public class SessionRessourceRestController {
 	@Autowired
 	private GestionRessourceService gestionRessourceService;
 	
+	@Autowired
+	private CreationPartieService createPartieService;
+	
 	@GetMapping("/{idp}&{idc}")
 	public List<SessionRessource> getBySession(@PathVariable Integer idp, @PathVariable Integer idc) {		
 		Optional <Session> opt = sessionService.findSession(idp, idc );
@@ -67,7 +71,6 @@ public class SessionRessourceRestController {
 			return sessionResRepo.findBySession(opt.get());
 		}
 		return null;
-		
 	}
 
 	
@@ -165,6 +168,12 @@ public class SessionRessourceRestController {
 		}
 		
 		gestionRessourceservice.transformationRessource(session.get(), transformationRessourceRepo.findById(idtr).get(), quantite);
+	}
+	
+	@PostMapping("/initPartie/{idp}")
+	public void initRessourcePartie (@PathVariable Integer idp) {
+		List<Session> sessions = sessionRepo.findByPartie(partieRepo.findById(idp).get());
+		createPartieService.initSessionRessource(sessions);
 	}
 
 }

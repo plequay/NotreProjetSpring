@@ -118,6 +118,12 @@ public class SessionBatimentRestController {
 		return gestionRessource.listeBatimentTransformation(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 	
+	@GetMapping("/production/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<SessionBatiment> batimentProduction(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+		return gestionRessource.listeBatimentProduction(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
+	}
+	
 	private Session actuDefAttPlayer(Session session) {
 		double att = 0;
 		double def =0;
@@ -136,6 +142,11 @@ public class SessionBatimentRestController {
 	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
 	public List<SessionBatiment> getBatimentsAttaque(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
 		return attaqueService.getBatimentAttaqueBySession(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
+	}
+	@GetMapping("defense/{idPartie}/{idCompte}")
+	@JsonView(JsonViews.SessionBatimentWithBatiment.class)
+	public List<SessionBatiment> getBatimentsDefense(@PathVariable Integer idPartie, @PathVariable Integer idCompte){
+		return sessionBatRepo.findBySessionAndBatimentDefense(sessionRepo.findByPartieAndCompte(partieRepo.findById(idPartie).get(), compteRepo.findById(idCompte).get()).get());
 	}
 
 	@PostMapping("/construction/{idPartie}/{idCompte}/{idBat}")
