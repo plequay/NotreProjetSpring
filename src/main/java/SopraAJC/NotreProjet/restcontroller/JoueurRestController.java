@@ -4,8 +4,10 @@ import SopraAJC.NotreProjet.exceptions.CompteException;
 import SopraAJC.NotreProjet.models.Compte;
 import SopraAJC.NotreProjet.models.Joueur;
 import SopraAJC.NotreProjet.models.JsonViews;
+import SopraAJC.NotreProjet.models.Partie;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
 import SopraAJC.NotreProjet.repositories.JoueurRepository;
+import SopraAJC.NotreProjet.services.JoueurService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +33,28 @@ public class JoueurRestController {
     JoueurRepository joueurRepository;
 
     @Autowired
+    JoueurService joueurService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping("")
     @JsonView(JsonViews.Common.class)
     public List<Joueur> allJoueur(){
         return joueurRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @JsonView(JsonViews.Common.class)
+    public Joueur joueurById(@PathVariable("id") Integer id){
+        return joueurService.joueurExistsInDB(id);
+    }
+
+    @GetMapping("/{id}/withPartie")
+    @JsonView(JsonViews.CompteWithSessionWithPartie.class)
+    public Joueur joueurByIdWithPartie(@PathVariable("id") Integer id){
+        joueurService.joueurExistsInDB(id);
+        return joueurRepository.findById(id).get();
     }
 
     @PostMapping("/inscription")
