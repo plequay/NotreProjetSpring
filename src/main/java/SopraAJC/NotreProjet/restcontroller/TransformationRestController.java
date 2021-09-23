@@ -117,15 +117,11 @@ public class TransformationRestController {
 				cbRepo.save(cb);
 			});
 			}
-			System.out.println("Avant");
 			if(!transformation.getTransformationRessouce().isEmpty()) {
-				System.out.println("dans if");
 				for(TransformationRessource tr : opt.get().getTransformationRessouce()) {
-					System.out.println("dans for");
 					trRepo.delete(tr);
 			}
 			}
-			System.out.println("Après");
 			List<TransformationRessource> listT = transformation.getTransformationRessouce();
 			if(!(listT == null)) {
 				listT.stream().forEach(e -> {
