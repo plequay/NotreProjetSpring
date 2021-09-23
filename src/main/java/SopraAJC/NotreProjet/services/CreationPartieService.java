@@ -5,10 +5,12 @@ import SopraAJC.NotreProjet.repositories.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CreationPartieService {
 
     @Autowired
@@ -81,6 +83,7 @@ public class CreationPartieService {
     		}
     		Batiment batiment = batimentRepository.findByNom("bastide").get();
     		SessionBatiment sessionBatiment = new SessionBatiment(session, batiment, batiment.getPointsDefense());
+    		sessionBatimentRepository.save(sessionBatiment);
         }
     }
     
