@@ -16,5 +16,5 @@ import SopraAJC.NotreProjet.models.Session;
 public interface PartieRepository extends JpaRepository <Partie, Integer> {
 
 
-    List<Partie> findByJoueur(Joueur joueur);
+ //   List<Partie> findBySession(Session session);
 }
