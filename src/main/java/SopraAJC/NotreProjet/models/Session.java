@@ -38,11 +38,11 @@ public class Session {
     private double att;
 
     @OneToMany (mappedBy = "session")
-    @JsonView({JsonViews.SessionWithSessionBatiment.class, SessionWithAll.class})
+    @JsonView({JsonViews.SessionWithSessionBatiment.class, JsonViews.SessionWithAll.class})
     private List<SessionBatiment> sessionBatiment;
 
     @OneToMany (mappedBy = "id.session")
-    @JsonView({JsonViews.SessionWithSessionRessource.class, SessionWithAll.class})
+    @JsonView({JsonViews.SessionWithSessionRessource.class, JsonViews.SessionWithAll.class})
     private Set<SessionRessource> sessionRessource;
 
     public Session() {

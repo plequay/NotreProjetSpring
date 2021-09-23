@@ -14,7 +14,7 @@ public class SessionKey implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "partie_id", foreignKey = @ForeignKey(name = "session_partie_id_pk"))
-	@JsonView({JsonViews.SessionWithPartie.class, JsonViews.SessionWithPartieAndCompte.class})
+	@JsonView({JsonViews.SessionWithPartie.class, JsonViews.SessionWithPartieAndCompte.class, JsonViews.CompteWithSessionWithPartie.class})
 	private Partie partie;
 
     @ManyToOne

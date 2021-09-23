@@ -22,6 +22,8 @@ public class JsonViews {
 
 	public static class CompteWithSession extends Common {}
 
+	public static class CompteWithSessionWithPartie extends CompteWithSession{}
+
 	public static class PartieWithSession extends Common {}
 
 	public static class BatimentWithCout extends Common {}
