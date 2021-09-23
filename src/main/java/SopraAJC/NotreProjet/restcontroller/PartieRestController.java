@@ -2,18 +2,21 @@ package SopraAJC.NotreProjet.restcontroller;
 
 import SopraAJC.NotreProjet.dto.PartieDto;
 import SopraAJC.NotreProjet.exceptions.PartieException;
+import SopraAJC.NotreProjet.models.Joueur;
 import SopraAJC.NotreProjet.models.JsonViews;
 import SopraAJC.NotreProjet.models.Partie;
 import SopraAJC.NotreProjet.models.Session;
 import SopraAJC.NotreProjet.models.SessionBatiment;
 import SopraAJC.NotreProjet.models.SessionRessource;
 import SopraAJC.NotreProjet.repositories.CompteRepository;
+import SopraAJC.NotreProjet.repositories.JoueurRepository;
 import SopraAJC.NotreProjet.repositories.PartieRepository;
 import SopraAJC.NotreProjet.repositories.SessionBatimentRepository;
 import SopraAJC.NotreProjet.repositories.SessionRepository;
 import SopraAJC.NotreProjet.repositories.SessionRessourceRepository;
 import SopraAJC.NotreProjet.services.CompteService;
 import SopraAJC.NotreProjet.services.ConsoleService;
+import SopraAJC.NotreProjet.services.JoueurService;
 import SopraAJC.NotreProjet.services.PartieService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
@@ -50,6 +53,12 @@ public class PartieRestController {
     @Autowired
     SessionRepository sessionRepo;
 
+    @Autowired
+    JoueurRepository joueurRepository;
+
+    @Autowired
+    JoueurService joueurService;
+
     @GetMapping("")
     @JsonView(JsonViews.Common.class)
     public List<Partie> allPartie(){
@@ -75,6 +84,14 @@ public class PartieRestController {
         partieService.partieExistsInDB(id);
         return partieRepository.findById(id).get();
     }
+
+//    @GetMapping("/{id}/joueur")
+//    @JsonView(JsonViews.Common.class)
+//    public List<Partie> partieByIdJoueur(@PathVariable("id") Integer joueurId){
+//        Joueur joueur = joueurService.joueurExistsInDB(joueurId);
+//        partieRepository.findByJoueur(joueur);
+//    }
+
 
     @PostMapping("")
     @JsonView(JsonViews.PartieWithSession.class)
