@@ -98,10 +98,6 @@ public class TransformationRestController {
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.BatimentWithCout.class)
 	public Transformation replaceBatimentTransformation(@Valid @RequestBody Transformation transformation, BindingResult br, @PathVariable Integer id) {
-//		transformation.getTransformationRessouce().stream().forEach(e-> {
-//			System.out.println(e.getRessourceLost().getNom());
-//			System.out.println(e.getRessourceWin().getNom());
-//		});
 		
 		if(br.hasErrors()) {
 			throw new BatimentException();
@@ -121,10 +117,15 @@ public class TransformationRestController {
 				cbRepo.save(cb);
 			});
 			}
-//			if(!transformation.getTransformationRessouce().isEmpty()) {
-//				for(TransformationRessource tr : opt.get().getTransformationRessouce()) {
-//					trRepo.delete(tr);
-//			}
+			System.out.println("Avant");
+			if(!transformation.getTransformationRessouce().isEmpty()) {
+				System.out.println("dans if");
+				for(TransformationRessource tr : opt.get().getTransformationRessouce()) {
+					System.out.println("dans for");
+					trRepo.delete(tr);
+			}
+			}
+			System.out.println("Après");
 			List<TransformationRessource> listT = transformation.getTransformationRessouce();
 			if(!(listT == null)) {
 				listT.stream().forEach(e -> {
